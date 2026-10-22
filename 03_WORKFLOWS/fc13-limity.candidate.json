@@ -1,0 +1,179 @@
+{
+  "schema_version": 2,
+  "diagram_type": "workflow",
+  "meta": {
+    "title": "FC-13 · Limity schvaľovania L1-L4",
+    "subtitle": "Typ+hnota → rizikový filter → úroveň L1-L4 → podpis → platba 4-eyes.",
+    "animation": "trace",
+    "visual_preset": "signal-flow",
+    "quality_profile": "showcase",
+    "output": "fc13-limity.html"
+  },
+  "lanes": [
+    {
+      "id": "l1",
+      "label": "Iniciátor / Vlastník"
+    },
+    {
+      "id": "l2",
+      "label": "Vykonávateľ (1L)"
+    },
+    {
+      "id": "l3",
+      "label": "Dohľad / Schválenie (2L)"
+    },
+    {
+      "id": "l4",
+      "label": "Log / Výstup"
+    }
+  ],
+  "phases": [
+    {
+      "id": "p0",
+      "label": "Vznik záväzku",
+      "fromCol": 0,
+      "toCol": 5
+    }
+  ],
+  "nodes": [
+    {
+      "id": "vzn",
+      "lane": "l1",
+      "col": 0,
+      "type": "frontend",
+      "label": "Vznik záväzku",
+      "sublabel": "typ + hodnota bez DPH (12 mes.)",
+      "width": 217
+    },
+    {
+      "id": "filtr",
+      "lane": "l3",
+      "col": 1,
+      "type": "security",
+      "label": "Rizikový filter",
+      "sublabel": "verejný funkci · agent · red flag · COI",
+      "tag": "rizikový → min L3 CCO",
+      "width": 269
+    },
+    {
+      "id": "l1",
+      "lane": "l2",
+      "col": 2,
+      "type": "security",
+      "label": "L1 · 1-eye",
+      "sublabel": "do 1 000 EUR · manažér",
+      "width": 159
+    },
+    {
+      "id": "l2n",
+      "lane": "l2",
+      "col": 3,
+      "type": "security",
+      "label": "L2 · 4-eyes",
+      "sublabel": "1-10k · manažér + Financie",
+      "width": 185
+    },
+    {
+      "id": "l3",
+      "lane": "l3",
+      "col": 4,
+      "type": "security",
+      "label": "L3 · + CCO",
+      "sublabel": "10-50k · CCO STOP-right",
+      "width": 165
+    },
+    {
+      "id": "l4",
+      "lane": "l3",
+      "col": 5,
+      "type": "security",
+      "label": "L4 · Predstavenstvo",
+      "sublabel": "nad 50k / vyhradené typy",
+      "width": 172
+    },
+    {
+      "id": "plat",
+      "lane": "l4",
+      "col": 5,
+      "type": "database",
+      "label": "Platba 4-eyes",
+      "sublabel": "zadávateľ ≠ autorizátor",
+      "tag": "DONE",
+      "width": 165
+    }
+  ],
+  "edges": [
+    {
+      "id": "e0",
+      "from": "vzn",
+      "to": "filtr"
+    },
+    {
+      "id": "e1",
+      "from": "filtr",
+      "to": "l1",
+      "label": "štandard"
+    },
+    {
+      "id": "e2",
+      "from": "l1",
+      "to": "l2n",
+      "label": "nad 1k"
+    },
+    {
+      "id": "e3",
+      "from": "l2n",
+      "to": "l3",
+      "label": "nad 10k"
+    },
+    {
+      "id": "e4",
+      "from": "l3",
+      "to": "l4",
+      "label": "nad 50k / rizikový"
+    },
+    {
+      "id": "e5",
+      "from": "l4",
+      "to": "plat",
+      "label": "schválené"
+    }
+  ],
+  "mainPath": [
+    "vzn",
+    "filtr",
+    "l1",
+    "l2n",
+    "l3",
+    "l4"
+  ],
+  "cards": [
+    {
+      "dot": "rose",
+      "title": "STOP",
+      "items": [
+        "Delenie nákupu pod limit = STOP",
+        "Rizikový prípad bez L3+ = STOP",
+        "Veto CCO/ECO/Bezp. prelomí len Predstavenstvo"
+      ]
+    },
+    {
+      "dot": "cyan",
+      "title": "Log",
+      "items": [
+        "ERP sign-off",
+        "Limits register",
+        "After-fact výnimky report CCO"
+      ]
+    },
+    {
+      "dot": "emerald",
+      "title": "KPI",
+      "items": [
+        "0 delení pod limit",
+        "100% rizikových na L3+",
+        "100% platieb 4-eyes"
+      ]
+    }
+  ]
+}

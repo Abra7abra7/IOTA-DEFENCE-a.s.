@@ -1,0 +1,149 @@
+{
+  "schema_version": 2,
+  "diagram_type": "workflow",
+  "meta": {
+    "title": "FC-10 · Whistleblowing",
+    "subtitle": "Podnet → potvrdenie 7 dní → preverenie 90 dní → výsledok + opatrenia → ochrana pred odvetou.",
+    "animation": "trace",
+    "visual_preset": "signal-flow",
+    "quality_profile": "showcase",
+    "output": "fc10-whistleblowing.html"
+  },
+  "lanes": [
+    {
+      "id": "l1",
+      "label": "Iniciátor / Vlastník"
+    },
+    {
+      "id": "l2",
+      "label": "Vykonávateľ (1L)"
+    },
+    {
+      "id": "l3",
+      "label": "Dohľad / Schválenie (2L)"
+    },
+    {
+      "id": "l4",
+      "label": "Log / Výstup"
+    }
+  ],
+  "phases": [
+    {
+      "id": "p0",
+      "label": "Podnet",
+      "fromCol": 0,
+      "toCol": 3
+    },
+    {
+      "id": "p1",
+      "label": "Potvrdenie",
+      "fromCol": 5,
+      "toCol": 5,
+      "variant": "security"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "pod",
+      "lane": "l2",
+      "col": 0,
+      "type": "frontend",
+      "label": "Podnet",
+      "sublabel": "platforma · e-mail · pošta · externý Úrad",
+      "width": 282
+    },
+    {
+      "id": "pot",
+      "lane": "l3",
+      "col": 1,
+      "type": "security",
+      "label": "Potvrdenie ≤ 7 dní",
+      "sublabel": "zodpovedná osoba · z.54/2019",
+      "width": 198
+    },
+    {
+      "id": "prev",
+      "lane": "l3",
+      "col": 2,
+      "type": "security",
+      "label": "Preverenie ≤ 90 dní",
+      "sublabel": "nestranné + Legal/CISO/ECO/Bezp.",
+      "tag": "proti Predstavenstvu → DR",
+      "width": 224
+    },
+    {
+      "id": "vysl",
+      "lane": "l4",
+      "col": 3,
+      "type": "database",
+      "label": "Výsledok + opatrenia",
+      "sublabel": "návrh Predstavenstvu/DR",
+      "width": 165
+    },
+    {
+      "id": "ochr",
+      "lane": "l4",
+      "col": 5,
+      "type": "database",
+      "label": "Ochrana pred odvetou",
+      "sublabel": "HR bez odvetného opatrenia",
+      "width": 185
+    }
+  ],
+  "edges": [
+    {
+      "id": "e0",
+      "from": "pod",
+      "to": "pot"
+    },
+    {
+      "id": "e1",
+      "from": "pot",
+      "to": "prev"
+    },
+    {
+      "id": "e2",
+      "from": "prev",
+      "to": "vysl"
+    },
+    {
+      "id": "e3",
+      "from": "vysl",
+      "to": "ochr"
+    }
+  ],
+  "mainPath": [
+    "pod",
+    "pot",
+    "prev",
+    "vysl"
+  ],
+  "cards": [
+    {
+      "dot": "rose",
+      "title": "STOP",
+      "items": [
+        "Proti Predstavenstvu = PREDRSA DR",
+        "US/export = prizvať Bezp./ECO/CISO",
+        "Odvetné opatrenie = okamžite zodp. osoba + DR"
+      ]
+    },
+    {
+      "dot": "cyan",
+      "title": "Log",
+      "items": [
+        "Register oznámení (3 r. §11 z.54/2019)",
+        "Prístup len zodp. osoba"
+      ]
+    },
+    {
+      "dot": "emerald",
+      "title": "KPI",
+      "items": [
+        "Potvrdenie < 7 dní",
+        "Preverenie < 90 dní",
+        "0 odvietných opatrení"
+      ]
+    }
+  ]
+}

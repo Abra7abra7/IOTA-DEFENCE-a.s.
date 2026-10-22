@@ -1,0 +1,159 @@
+{
+  "schema_version": 2,
+  "diagram_type": "workflow",
+  "meta": {
+    "title": "FC-26 · Odchod zamestnanca (Offboarding)",
+    "subtitle": "Skončenie PP → handover → pomôcky → revokácia prístupov (24h) → odchodový rozhovor → zápočtový list.",
+    "animation": "trace",
+    "visual_preset": "signal-flow",
+    "quality_profile": "showcase",
+    "output": "fc26-offboarding.html"
+  },
+  "lanes": [
+    {
+      "id": "l1",
+      "label": "Iniciátor (1L)"
+    },
+    {
+      "id": "l2",
+      "label": "Vykonávateľ (1L)"
+    },
+    {
+      "id": "l3",
+      "label": "Dohľad / Schválenie (2L)"
+    },
+    {
+      "id": "l4",
+      "label": "Registre / Výstup"
+    }
+  ],
+  "phases": [
+    {
+      "id": "p0",
+      "label": "Skončenie",
+      "fromCol": 0,
+      "toCol": 5
+    }
+  ],
+  "nodes": [
+    {
+      "id": "ozn",
+      "lane": "l1",
+      "col": 0,
+      "type": "frontend",
+      "label": "Skončenie PP",
+      "sublabel": "dohoda · výpoveď",
+      "width": 148
+    },
+    {
+      "id": "hand",
+      "lane": "l2",
+      "col": 1,
+      "type": "backend",
+      "label": "Handover agendy",
+      "sublabel": "dokumenty · spis",
+      "width": 148
+    },
+    {
+      "id": "proto",
+      "lane": "l2",
+      "col": 2,
+      "type": "database",
+      "label": "Odovzdanie pomôcok",
+      "sublabel": "majetkové vyrovnanie",
+      "width": 148
+    },
+    {
+      "id": "rev",
+      "lane": "l3",
+      "col": 3,
+      "type": "security",
+      "label": "Revokácia prístupov",
+      "sublabel": "do 24h · MFA · zóny",
+      "tag": "STOP: bez revokácie",
+      "width": 148
+    },
+    {
+      "id": "rozh",
+      "lane": "l3",
+      "col": 4,
+      "type": "security",
+      "label": "Odchodový rozhovor",
+      "sublabel": "IPR · NDA · prehlásenie",
+      "width": 165
+    },
+    {
+      "id": "zapoc",
+      "lane": "l4",
+      "col": 5,
+      "type": "database",
+      "label": "Zápočtový list",
+      "sublabel": "vyúčtovanie mzdy",
+      "tag": "DONE",
+      "width": 148
+    }
+  ],
+  "edges": [
+    {
+      "id": "e0",
+      "from": "ozn",
+      "to": "hand"
+    },
+    {
+      "id": "e1",
+      "from": "hand",
+      "to": "proto"
+    },
+    {
+      "id": "e2",
+      "from": "proto",
+      "to": "rev"
+    },
+    {
+      "id": "e3",
+      "from": "rev",
+      "to": "rozh"
+    },
+    {
+      "id": "e4",
+      "from": "rozh",
+      "to": "zapoc"
+    }
+  ],
+  "mainPath": [
+    "ozn",
+    "hand",
+    "proto",
+    "rev",
+    "rozh"
+  ],
+  "cards": [
+    {
+      "dot": "rose",
+      "title": "STOP",
+      "items": [
+        "Bez revokácie = žiadny Z2/Z3 po konci",
+        "Bez pomôcok = pozastavenie zápočtu",
+        "Prehlásenie nepodpísané"
+      ]
+    },
+    {
+      "dot": "cyan",
+      "title": "Log",
+      "items": [
+        "Offboarding check",
+        "Access log (revokácia)",
+        "Register pomôcok"
+      ]
+    },
+    {
+      "dot": "emerald",
+      "title": "KPI",
+      "items": [
+        "100% revokácií do 24h",
+        "100% handover",
+        "0 prístupov po odchode"
+      ]
+    }
+  ]
+}

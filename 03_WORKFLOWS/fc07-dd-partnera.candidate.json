@@ -1,0 +1,162 @@
+{
+  "schema_version": 2,
+  "diagram_type": "workflow",
+  "meta": {
+    "title": "FC-07 · Due diligence partnera",
+    "subtitle": "Zápis → screening → DD skóre → rozhodnutie CCO → zmluva → aktivácia.",
+    "animation": "trace",
+    "visual_preset": "signal-flow",
+    "quality_profile": "showcase",
+    "output": "fc07-dd-partnera.html"
+  },
+  "lanes": [
+    {
+      "id": "l1",
+      "label": "Iniciátor / Vlastník"
+    },
+    {
+      "id": "l2",
+      "label": "Vykonávateľ (1L)"
+    },
+    {
+      "id": "l3",
+      "label": "Dohľad / Schválenie (2L)"
+    },
+    {
+      "id": "l4",
+      "label": "Log / Výstup"
+    }
+  ],
+  "phases": [
+    {
+      "id": "p0",
+      "label": "Vstup",
+      "fromCol": 0,
+      "toCol": 5
+    }
+  ],
+  "nodes": [
+    {
+      "id": "v",
+      "lane": "l2",
+      "col": 0,
+      "type": "frontend",
+      "label": "Zápis V PREVEROVANÍ",
+      "sublabel": "Obchod/Nákup",
+      "width": 150
+    },
+    {
+      "id": "scr",
+      "lane": "l3",
+      "col": 1,
+      "type": "security",
+      "label": "Screening + krajina",
+      "sublabel": "CCO/ECO",
+      "tag": "sankčná zhoda → STOP",
+      "width": 150
+    },
+    {
+      "id": "dd",
+      "lane": "l2",
+      "col": 2,
+      "type": "backend",
+      "label": "DD skóre + podklady",
+      "sublabel": "Nákup/CCO",
+      "width": 150
+    },
+    {
+      "id": "roz",
+      "lane": "l3",
+      "col": 3,
+      "type": "security",
+      "label": "Rozhodnutie CCO",
+      "sublabel": "CCO(+ECO)",
+      "tag": "STOP: PO pred aktiváciou",
+      "width": 176
+    },
+    {
+      "id": "zml",
+      "lane": "l4",
+      "col": 4,
+      "type": "database",
+      "label": "Zmluva + doložky",
+      "sublabel": "Legal",
+      "width": 150
+    },
+    {
+      "id": "akt",
+      "lane": "l4",
+      "col": 5,
+      "type": "database",
+      "label": "Aktivácia SCHVÁLENÝ",
+      "sublabel": "register status",
+      "tag": "DONE",
+      "width": 150
+    }
+  ],
+  "edges": [
+    {
+      "id": "e0",
+      "from": "v",
+      "to": "scr"
+    },
+    {
+      "id": "e1",
+      "from": "scr",
+      "to": "dd",
+      "label": "report OK"
+    },
+    {
+      "id": "e2",
+      "from": "dd",
+      "to": "roz"
+    },
+    {
+      "id": "e3",
+      "from": "roz",
+      "to": "zml",
+      "label": "clearance"
+    },
+    {
+      "id": "e4",
+      "from": "zml",
+      "to": "akt"
+    }
+  ],
+  "mainPath": [
+    "v",
+    "scr",
+    "dd",
+    "roz",
+    "zml"
+  ],
+  "cards": [
+    {
+      "dot": "rose",
+      "title": "STOP",
+      "items": [
+        "Sankčná zhoda = + eskalácia",
+        "Agent/verejný sektor = rozšírená DD + Predstavenstvo",
+        "PO/záloha pred aktiváciou = STOP"
+      ]
+    },
+    {
+      "dot": "cyan",
+      "title": "Log",
+      "items": [
+        "Register tretích strán",
+        "DD spis",
+        "Screening log"
+      ]
+    },
+    {
+      "dot": "emerald",
+      "title": "KPI",
+      "items": [
+        "100% partnerov preverených",
+        "DD skóre dokumentované",
+        "0 tichých aktivácií"
+      ]
+    }
+  ]
+}

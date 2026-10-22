@@ -1,0 +1,161 @@
+{
+  "schema_version": 2,
+  "diagram_type": "workflow",
+  "meta": {
+    "title": "FC-27 · Nezhody / NCR / CAPA (Kvalita)",
+    "subtitle": "Nezhoda → triáž → karanténa → RCA → náprava → prevencia → overenie → uzavretie.",
+    "animation": "trace",
+    "visual_preset": "signal-flow",
+    "quality_profile": "showcase",
+    "output": "fc27-ncr-capa.html"
+  },
+  "lanes": [
+    {
+      "id": "l1",
+      "label": "Iniciátor (1L)"
+    },
+    {
+      "id": "l2",
+      "label": "Vykonávateľ (1L)"
+    },
+    {
+      "id": "l3",
+      "label": "Dohľad / Schválenie (2L)"
+    },
+    {
+      "id": "l4",
+      "label": "Registre / Výstup"
+    }
+  ],
+  "phases": [
+    {
+      "id": "p0",
+      "label": "Registrácia",
+      "fromCol": 0,
+      "toCol": 5
+    }
+  ],
+  "nodes": [
+    {
+      "id": "ncr",
+      "lane": "l1",
+      "col": 0,
+      "type": "frontend",
+      "label": "Registrácia NCR",
+      "sublabel": "číslicové číslo",
+      "tag": "NCR",
+      "width": 148
+    },
+    {
+      "id": "tria",
+      "lane": "l3",
+      "col": 1,
+      "type": "security",
+      "label": "Triáž",
+      "sublabel": "výrobná · audit · dodávateľská",
+      "width": 211
+    },
+    {
+      "id": "kara",
+      "lane": "l2",
+      "col": 2,
+      "type": "security",
+      "label": "Karanténa",
+      "sublabel": "zastavenie dávky",
+      "width": 148
+    },
+    {
+      "id": "rca",
+      "lane": "l2",
+      "col": 3,
+      "type": "backend",
+      "label": "Root cause",
+      "sublabel": "5-Why · Ishikawa",
+      "width": 148
+    },
+    {
+      "id": "ca",
+      "lane": "l3",
+      "col": 4,
+      "type": "backend",
+      "label": "Náprava + prevencia",
+      "sublabel": "CA · PA · termín",
+      "width": 148
+    },
+    {
+      "id": "uzav",
+      "lane": "l4",
+      "col": 5,
+      "type": "database",
+      "label": "Overenie + uzavretie",
+      "sublabel": "účinnosť opatrenia",
+      "tag": "DONE",
+      "width": 154.0
+    }
+  ],
+  "edges": [
+    {
+      "id": "e0",
+      "from": "ncr",
+      "to": "tria"
+    },
+    {
+      "id": "e1",
+      "from": "tria",
+      "to": "kara",
+      "label": "izolovať"
+    },
+    {
+      "id": "e2",
+      "from": "kara",
+      "to": "rca"
+    },
+    {
+      "id": "e3",
+      "from": "rca",
+      "to": "ca"
+    },
+    {
+      "id": "e4",
+      "from": "ca",
+      "to": "uzav",
+      "label": "overené"
+    }
+  ],
+  "mainPath": [
+    "ncr",
+    "tria",
+    "kara",
+    "rca",
+    "ca"
+  ],
+  "cards": [
+    {
+      "dot": "rose",
+      "title": "STOP",
+      "items": [
+        "Nezhoda s bezp. vplyvom = okamžité hlásenie (z.58/2014)",
+        "Dodávka z karantény bez rozhodnutia = STOP",
+        "Uzavretie bez overenia = STOP"
+      ]
+    },
+    {
+      "dot": "cyan",
+      "title": "Log",
+      "items": [
+        "Register nezhôd (NCR)",
+        "CAPA register",
+        "Karanténny register"
+      ]
+    },
+    {
+      "dot": "emerald",
+      "title": "KPI",
+      "items": [
+        "100% NCR do 30 dní",
+        "0 nezhôd bez RCA",
+        "Trend ≤ 2 % výroby"
+      ]
+    }
+  ]
+}

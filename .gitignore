@@ -1,0 +1,4 @@
+.archify/
+*.finalize.json
+*.finalize-summary.json
+*.zip

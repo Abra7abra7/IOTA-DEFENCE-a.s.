@@ -1,0 +1,154 @@
+{
+  "schema_version": 2,
+  "diagram_type": "workflow",
+  "meta": {
+    "title": "FC-11 · Dar a pohostenie (ABAC)",
+    "subtitle": "Požiadavka → ABAC kontrola → schválenie limitu → úhrada (nie hotovosť) → register darov.",
+    "animation": "trace",
+    "visual_preset": "signal-flow",
+    "quality_profile": "showcase",
+    "output": "fc11-dar.html"
+  },
+  "lanes": [
+    {
+      "id": "l1",
+      "label": "Iniciátor / Vlastník"
+    },
+    {
+      "id": "l2",
+      "label": "Vykonávateľ (1L)"
+    },
+    {
+      "id": "l3",
+      "label": "Dohľad / Schválenie (2L)"
+    },
+    {
+      "id": "l4",
+      "label": "Log / Výstup"
+    }
+  ],
+  "phases": [
+    {
+      "id": "p0",
+      "label": "Vstup",
+      "fromCol": 0,
+      "toCol": 3
+    },
+    {
+      "id": "p1",
+      "label": "ABAC kontrola",
+      "fromCol": 5,
+      "toCol": 5,
+      "variant": "security"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "poz",
+      "lane": "l1",
+      "col": 0,
+      "type": "frontend",
+      "label": "Požiadavka + účastníci",
+      "sublabel": "žiadateľ",
+      "width": 169.0
+    },
+    {
+      "id": "abac",
+      "lane": "l3",
+      "col": 1,
+      "type": "security",
+      "label": "ABAC kontrola",
+      "sublabel": "žiadateľ + CCO",
+      "tag": "verejný funkcionár → CCO vopred",
+      "width": 221
+    },
+    {
+      "id": "lim",
+      "lane": "l3",
+      "col": 2,
+      "type": "security",
+      "label": "Schválenie limitu",
+      "sublabel": "manažér / CCO / Predstavenstvo",
+      "tag": "tender/rozhodovanie → STOP",
+      "width": 211
+    },
+    {
+      "id": "uhr",
+      "lane": "l2",
+      "col": 3,
+      "type": "database",
+      "label": "Úhrada (nie hotovosť)",
+      "sublabel": "Financie · doklad",
+      "width": 162.5
+    },
+    {
+      "id": "reg",
+      "lane": "l4",
+      "col": 5,
+      "type": "database",
+      "label": "Register darov",
+      "sublabel": "žiadateľ/CCO",
+      "tag": "DONE",
+      "width": 150
+    }
+  ],
+  "edges": [
+    {
+      "id": "e0",
+      "from": "poz",
+      "to": "abac"
+    },
+    {
+      "id": "e1",
+      "from": "abac",
+      "to": "lim",
+      "label": "ANO/STOP"
+    },
+    {
+      "id": "e2",
+      "from": "lim",
+      "to": "uhr",
+      "label": "schválené"
+    },
+    {
+      "id": "e3",
+      "from": "uhr",
+      "to": "reg"
+    }
+  ],
+  "mainPath": [
+    "poz",
+    "abac",
+    "lim",
+    "uhr"
+  ],
+  "cards": [
+    {
+      "dot": "rose",
+      "title": "STOP",
+      "items": [
+        "Verejný funkcionár → CCO vopred",
+        "Tender/rozhodovanie = STOP",
+        "Hotovosť/poukaz = STOP",
+        "Sponzoring → Predstavenstvo + DD"
+      ]
+    },
+    {
+      "dot": "cyan",
+      "title": "Log",
+      "items": [
+        "Register darov (5 r.)",
+        "E-schválenie log"
+      ]
+    },
+    {
+      "dot": "emerald",
+      "title": "KPI",
+      "items": [
+        "100% darov v registri",
+        "0 hotovosti",
+        "100% verejný funkci CCO"
+      ]
+    }
+  ]
+}

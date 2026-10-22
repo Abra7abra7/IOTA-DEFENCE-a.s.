@@ -1,0 +1,152 @@
+{
+  "schema_version": 2,
+  "diagram_type": "workflow",
+  "meta": {
+    "title": "FC-15 · BCP/DR aktivácia krízového štábu",
+    "subtitle": "Hlásenie narušenia → aktivácia štábu → izolácia → obnova podľa priorít → lessons learned.",
+    "animation": "trace",
+    "visual_preset": "signal-flow",
+    "quality_profile": "showcase",
+    "output": "fc15-bcp.html"
+  },
+  "lanes": [
+    {
+      "id": "l1",
+      "label": "Iniciátor / Vlastník"
+    },
+    {
+      "id": "l2",
+      "label": "Vykonávateľ (1L)"
+    },
+    {
+      "id": "l3",
+      "label": "Dohľad / Schválenie (2L)"
+    },
+    {
+      "id": "l4",
+      "label": "Log / Výstup"
+    }
+  ],
+  "phases": [
+    {
+      "id": "p0",
+      "label": "Hlásenie",
+      "fromCol": 0,
+      "toCol": 3
+    },
+    {
+      "id": "p1",
+      "label": "Aktivácia",
+      "fromCol": 5,
+      "toCol": 5,
+      "variant": "security"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "hl",
+      "lane": "l2",
+      "col": 0,
+      "type": "frontend",
+      "label": "Hlásenie narušenia",
+      "sublabel": "ktokoľvek",
+      "width": 150
+    },
+    {
+      "id": "akt",
+      "lane": "l3",
+      "col": 1,
+      "type": "security",
+      "label": "Aktivácia krízového štábu",
+      "sublabel": "kritériá aktivácie",
+      "tag": "utajované → Bezp./NBÚ",
+      "width": 188.5
+    },
+    {
+      "id": "izol",
+      "lane": "l2",
+      "col": 2,
+      "type": "security",
+      "label": "Izolácia / náhradný postup",
+      "sublabel": "IT/CISO",
+      "width": 195.0
+    },
+    {
+      "id": "obn",
+      "lane": "l3",
+      "col": 3,
+      "type": "security",
+      "label": "Obnova podľa priorít",
+      "sublabel": "IdP → komunikácia → platby → ERP",
+      "tag": "zmena IBAN → STOP",
+      "width": 224
+    },
+    {
+      "id": "ll",
+      "lane": "l4",
+      "col": 5,
+      "type": "database",
+      "label": "Lessons learned",
+      "sublabel": "report + zlepšenia",
+      "tag": "DONE",
+      "width": 150
+    }
+  ],
+  "edges": [
+    {
+      "id": "e0",
+      "from": "hl",
+      "to": "akt"
+    },
+    {
+      "id": "e1",
+      "from": "akt",
+      "to": "izol"
+    },
+    {
+      "id": "e2",
+      "from": "izol",
+      "to": "obn"
+    },
+    {
+      "id": "e3",
+      "from": "obn",
+      "to": "ll"
+    }
+  ],
+  "mainPath": [
+    "hl",
+    "akt",
+    "izol",
+    "obn"
+  ],
+  "cards": [
+    {
+      "dot": "rose",
+      "title": "STOP",
+      "items": [
+        "Utajované → mimo BCP (Bezp./NBÚ)",
+        "Zmena IBAN počas krízy = STOP",
+        "DR test plán ročne"
+      ]
+    },
+    {
+      "dot": "cyan",
+      "title": "Log",
+      "items": [
+        "BCP register",
+        "DR test report",
+        "Lessons learned"
+      ]
+    },
+    {
+      "dot": "emerald",
+      "title": "KPI",
+      "items": [
+        "DR test 1×/rok",
+        "RPO v SLA",
+        "100% priorít obnovených"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,162 @@
+{
+  "schema_version": 2,
+  "diagram_type": "workflow",
+  "meta": {
+    "title": "FC-24 · Riadenie dokumentácie",
+    "subtitle": "Nový/revízia → kontrola (RACI, právny základ) → schválenie → publikácia → školenie → archív → retencia.",
+    "animation": "trace",
+    "visual_preset": "signal-flow",
+    "quality_profile": "showcase",
+    "output": "fc24-dokumentacia.html"
+  },
+  "lanes": [
+    {
+      "id": "l1",
+      "label": "Iniciátor (1L)"
+    },
+    {
+      "id": "l2",
+      "label": "Vykonávateľ (1L)"
+    },
+    {
+      "id": "l3",
+      "label": "Dohľad / Schválenie (2L)"
+    },
+    {
+      "id": "l4",
+      "label": "Registre / Výstup"
+    }
+  ],
+  "phases": [
+    {
+      "id": "p0",
+      "label": "Vstup",
+      "fromCol": 0,
+      "toCol": 5
+    }
+  ],
+  "nodes": [
+    {
+      "id": "novy",
+      "lane": "l2",
+      "col": 0,
+      "type": "messagebus",
+      "label": "Nový/revízia",
+      "sublabel": "šablóna NN Názov – STAV",
+      "width": 165
+    },
+    {
+      "id": "kontrola",
+      "lane": "l3",
+      "col": 1,
+      "type": "security",
+      "label": "CCO kontrola",
+      "sublabel": "RACI · právny základ · KPI",
+      "width": 185
+    },
+    {
+      "id": "schval",
+      "lane": "l3",
+      "col": 2,
+      "type": "security",
+      "label": "Schválenie",
+      "sublabel": "predstavenstvo pre politiky",
+      "width": 191
+    },
+    {
+      "id": "publik",
+      "lane": "l4",
+      "col": 3,
+      "type": "database",
+      "label": "Publikácia PLATNÉ",
+      "sublabel": "jedno miesto pravdy",
+      "width": 139
+    },
+    {
+      "id": "skol",
+      "lane": "l1",
+      "col": 5,
+      "type": "messagebus",
+      "label": "Školenie / oznam",
+      "sublabel": "HR · CCO",
+      "width": 132
+    },
+    {
+      "id": "arch",
+      "lane": "l4",
+      "col": 4,
+      "type": "database",
+      "label": "99_Archiv + retencia",
+      "sublabel": "nič sa nemaže",
+      "tag": "DONE",
+      "width": 154
+    }
+  ],
+  "edges": [
+    {
+      "id": "e0",
+      "from": "novy",
+      "to": "kontrola"
+    },
+    {
+      "id": "e1",
+      "from": "kontrola",
+      "to": "schval",
+      "label": "OK",
+      "variant": "security"
+    },
+    {
+      "id": "e2",
+      "from": "schval",
+      "to": "publik",
+      "label": "PODPÍSANÉ",
+      "variant": "emphasis"
+    },
+    {
+      "id": "e3",
+      "from": "publik",
+      "to": "skol"
+    },
+    {
+      "id": "e4",
+      "from": "publik",
+      "to": "arch"
+    }
+  ],
+  "mainPath": [
+    "novy",
+    "kontrola",
+    "schval",
+    "publik"
+  ],
+  "cards": [
+    {
+      "dot": "rose",
+      "title": "STOP",
+      "items": [
+        "Bez vlastníka/schválenia = nie PLATNÉ",
+        "Dva verzie v pracovnom = archivovať",
+        "Z2/Z3 mimo úložiska = STOP"
+      ]
+    },
+    {
+      "dot": "cyan",
+      "title": "Log",
+      "items": [
+        "Register dokumentov",
+        "Version history",
+        "Change log"
+      ]
+    },
+    {
+      "dot": "emerald",
+      "title": "KPI",
+      "items": [
+        "100% dokumentov s vlastníkom",
+        "0 duplicit",
+        "Retencia podľa registrov"
+      ]
+    }
+  ],
+  "groups": []
+}

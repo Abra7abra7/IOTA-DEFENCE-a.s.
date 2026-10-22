@@ -1,0 +1,186 @@
+{
+  "schema_version": 2,
+  "diagram_type": "workflow",
+  "meta": {
+    "title": "FC-23 · Vývoj produktu (dev lifecycle + IPR)",
+    "subtitle": "Brief → feasibilita → návrh → design gate (klasifikácia BOM) → prototyp/test → dokumentácia → IPR → release.",
+    "animation": "trace",
+    "visual_preset": "signal-flow",
+    "quality_profile": "showcase",
+    "output": "fc23-vyvoj-produktu.html"
+  },
+  "lanes": [
+    {
+      "id": "l1",
+      "label": "Iniciátor (1L)"
+    },
+    {
+      "id": "l2",
+      "label": "Vykonávateľ (1L)"
+    },
+    {
+      "id": "l3",
+      "label": "Dohľad / Schválenie (2L)"
+    },
+    {
+      "id": "l4",
+      "label": "Registre / Výstup"
+    }
+  ],
+  "phases": [
+    {
+      "id": "p0",
+      "label": "Brief + feasibilita",
+      "fromCol": 0,
+      "toCol": 5
+    }
+  ],
+  "nodes": [
+    {
+      "id": "brief",
+      "lane": "l2",
+      "col": 0,
+      "type": "messagebus",
+      "label": "Product brief",
+      "sublabel": "nápad · požiadavka",
+      "width": 133
+    },
+    {
+      "id": "feas",
+      "lane": "l3",
+      "col": 1,
+      "type": "security",
+      "label": "Feasibilita + IP search",
+      "sublabel": "klasifikácia BOM · Go/No-Go",
+      "width": 191
+    },
+    {
+      "id": "dev",
+      "lane": "l2",
+      "col": 2,
+      "type": "backend",
+      "label": "Návrh",
+      "sublabel": "CAD · elektronika · softvér",
+      "width": 191
+    },
+    {
+      "id": "gate",
+      "lane": "l3",
+      "col": 3,
+      "type": "security",
+      "label": "DESIGN GATE",
+      "sublabel": "klasifikácia každého komponentu",
+      "tag": "STOP: bez klasifikácie",
+      "width": 217
+    },
+    {
+      "id": "proto",
+      "lane": "l4",
+      "col": 4,
+      "type": "database",
+      "label": "Prototyp + test",
+      "sublabel": "výroba · EMC · environment",
+      "width": 185
+    },
+    {
+      "id": "ipr",
+      "lane": "l3",
+      "col": 5,
+      "type": "database",
+      "label": "IPR rozhodnutie",
+      "sublabel": "patent · návrh · trade-secret",
+      "width": 204
+    },
+    {
+      "id": "rel",
+      "lane": "l2",
+      "col": 4,
+      "type": "database",
+      "label": "Release do výroby",
+      "sublabel": "BOM release · QMS · docs",
+      "tag": "DONE",
+      "width": 172
+    }
+  ],
+  "edges": [
+    {
+      "id": "e0",
+      "from": "brief",
+      "to": "feas"
+    },
+    {
+      "id": "e1",
+      "from": "feas",
+      "to": "dev",
+      "label": "go",
+      "variant": "default"
+    },
+    {
+      "id": "e2",
+      "from": "dev",
+      "to": "gate"
+    },
+    {
+      "id": "e3",
+      "from": "gate",
+      "to": "proto",
+      "label": "PASS",
+      "variant": "emphasis"
+    },
+    {
+      "id": "e4",
+      "from": "proto",
+      "to": "ipr"
+    },
+    {
+      "id": "e5",
+      "from": "ipr",
+      "to": "rel"
+    },
+    {
+      "id": "e6",
+      "from": "gate",
+      "to": "rel",
+      "label": "STOP",
+      "variant": "security",
+      "role": "error"
+    }
+  ],
+  "mainPath": [
+    "brief",
+    "feas",
+    "dev",
+    "gate",
+    "proto"
+  ],
+  "cards": [
+    {
+      "dot": "rose",
+      "title": "STOP",
+      "items": [
+        "Design gate bez klasifikácie = STOP",
+        "USML komponent bez stratégie = STOP",
+        "Prototyp bez test reportu = nie do výroby"
+      ]
+    },
+    {
+      "dot": "cyan",
+      "title": "Log",
+      "items": [
+        "Vývojový register (fázy)",
+        "BOM verzie + design gate log",
+        "IPR register + test reports"
+      ]
+    },
+    {
+      "dot": "emerald",
+      "title": "KPI",
+      "items": [
+        "100% design gate pass",
+        "100% BOM klasifikovaný",
+        "Release = kompletná dokumentácia"
+      ]
+    }
+  ],
+  "groups": []
+}

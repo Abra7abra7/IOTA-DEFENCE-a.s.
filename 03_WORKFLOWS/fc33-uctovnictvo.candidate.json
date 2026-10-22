@@ -1,0 +1,174 @@
+{
+  "schema_version": 2,
+  "diagram_type": "workflow",
+  "meta": {
+    "title": "FC-33 · Účtovníctvo a controlling",
+    "subtitle": "Doklady → zaúčtovanie + kontrola → mesačná uzávierka/DPH → controlling → AML → audit → archív.",
+    "animation": "trace",
+    "visual_preset": "signal-flow",
+    "quality_profile": "showcase",
+    "output": "fc33-uctovnictvo.html"
+  },
+  "lanes": [
+    {
+      "id": "l1",
+      "label": "Iniciátor (1L)"
+    },
+    {
+      "id": "l2",
+      "label": "Vykonávateľ (1L)"
+    },
+    {
+      "id": "l3",
+      "label": "Dohľad / Schválenie (2L)"
+    },
+    {
+      "id": "l4",
+      "label": "Registre / Výstup"
+    }
+  ],
+  "phases": [
+    {
+      "id": "p0",
+      "label": "Doklady",
+      "fromCol": 0,
+      "toCol": 5
+    }
+  ],
+  "nodes": [
+    {
+      "id": "dok",
+      "lane": "l1",
+      "col": 0,
+      "type": "frontend",
+      "label": "Príjem dokladov",
+      "sublabel": "faktúry · banka",
+      "width": 148
+    },
+    {
+      "id": "uct",
+      "lane": "l2",
+      "col": 1,
+      "type": "backend",
+      "label": "Zaúčtovanie",
+      "sublabel": "HPP · 4-eyes",
+      "width": 148
+    },
+    {
+      "id": "mes",
+      "lane": "l2",
+      "col": 2,
+      "type": "backend",
+      "label": "Mesačná uzávierka + DPH",
+      "sublabel": "report",
+      "width": 173.5
+    },
+    {
+      "id": "ctl",
+      "lane": "l3",
+      "col": 3,
+      "type": "backend",
+      "label": "Controlling",
+      "sublabel": "marže · náklady · backlog",
+      "width": 178
+    },
+    {
+      "id": "aml",
+      "lane": "l3",
+      "col": 4,
+      "type": "security",
+      "label": "AML kontrola",
+      "sublabel": "hotovosť · podozrenie",
+      "tag": "STOP: hotovosť>10k",
+      "width": 152
+    },
+    {
+      "id": "roc",
+      "lane": "l3",
+      "col": 5,
+      "type": "security",
+      "label": "Ročná závierka + audit",
+      "sublabel": "audítor",
+      "width": 167.0
+    },
+    {
+      "id": "arch",
+      "lane": "l4",
+      "col": 5,
+      "type": "database",
+      "label": "Archív dokladov",
+      "sublabel": "retencia",
+      "tag": "DONE",
+      "width": 148
+    }
+  ],
+  "edges": [
+    {
+      "id": "e0",
+      "from": "dok",
+      "to": "uct"
+    },
+    {
+      "id": "e1",
+      "from": "uct",
+      "to": "mes"
+    },
+    {
+      "id": "e2",
+      "from": "mes",
+      "to": "ctl"
+    },
+    {
+      "id": "e3",
+      "from": "ctl",
+      "to": "aml"
+    },
+    {
+      "id": "e4",
+      "from": "aml",
+      "to": "roc"
+    },
+    {
+      "id": "e5",
+      "from": "roc",
+      "to": "arch"
+    }
+  ],
+  "mainPath": [
+    "dok",
+    "uct",
+    "mes",
+    "ctl",
+    "aml",
+    "roc"
+  ],
+  "cards": [
+    {
+      "dot": "rose",
+      "title": "STOP",
+      "items": [
+        "Doklad bez podkladu = nezaúčtovať",
+        "Hotovosť > 10 000 € = STOP",
+        "Deň uzávierky posun = eskalácia"
+      ]
+    },
+    {
+      "dot": "cyan",
+      "title": "Log",
+      "items": [
+        "Účtovný register",
+        "DPH register",
+        "AML log"
+      ]
+    },
+    {
+      "dot": "emerald",
+      "title": "KPI",
+      "items": [
+        "100% dokladov do uzávierky",
+        "0 AML odchýlok",
+        "Závierka v lehote"
+      ]
+    }
+  ]
+}

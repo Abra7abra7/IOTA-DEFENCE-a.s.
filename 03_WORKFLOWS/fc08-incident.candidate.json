@@ -1,0 +1,162 @@
+{
+  "schema_version": 2,
+  "diagram_type": "workflow",
+  "meta": {
+    "title": "FC-08 · Incident response",
+    "subtitle": "Detekcia → klasifikácia → notifikácia → izolácia → hlásenie orgánom → obnova + poučenie.",
+    "animation": "trace",
+    "visual_preset": "signal-flow",
+    "quality_profile": "showcase",
+    "output": "fc08-incident.html"
+  },
+  "lanes": [
+    {
+      "id": "l1",
+      "label": "Iniciátor / Vlastník"
+    },
+    {
+      "id": "l2",
+      "label": "Vykonávateľ (1L)"
+    },
+    {
+      "id": "l3",
+      "label": "Dohľad / Schválenie (2L)"
+    },
+    {
+      "id": "l4",
+      "label": "Log / Výstup"
+    }
+  ],
+  "phases": [
+    {
+      "id": "p0",
+      "label": "Detekcia",
+      "fromCol": 0,
+      "toCol": 5
+    }
+  ],
+  "nodes": [
+    {
+      "id": "det",
+      "lane": "l2",
+      "col": 0,
+      "type": "frontend",
+      "label": "Detekcia",
+      "sublabel": "SIEM/SOC/ktokoľvek",
+      "width": 150
+    },
+    {
+      "id": "klas",
+      "lane": "l3",
+      "col": 1,
+      "type": "security",
+      "label": "Klasifikácia",
+      "sublabel": "typ + severita",
+      "tag": "P1? → krízový štáb",
+      "width": 150
+    },
+    {
+      "id": "notif",
+      "lane": "l2",
+      "col": 2,
+      "type": "messagebus",
+      "label": "Interná notifikácia",
+      "sublabel": "CISO/gestor",
+      "width": 150
+    },
+    {
+      "id": "izol",
+      "lane": "l2",
+      "col": 3,
+      "type": "security",
+      "label": "Izolácia + dôkazy",
+      "sublabel": "IT+CISO",
+      "width": 150
+    },
+    {
+      "id": "hlas",
+      "lane": "l3",
+      "col": 4,
+      "type": "security",
+      "label": "Hlásenie orgánom",
+      "sublabel": "DPO/Bezp./Legal",
+      "tag": "OOÚ 72h",
+      "width": 150
+    },
+    {
+      "id": "obn",
+      "lane": "l4",
+      "col": 5,
+      "type": "database",
+      "label": "Obnova + poučenie",
+      "sublabel": "krízový štáb · report",
+      "tag": "DONE",
+      "width": 152
+    }
+  ],
+  "edges": [
+    {
+      "id": "e0",
+      "from": "det",
+      "to": "klas",
+      "label": "cas zistenia"
+    },
+    {
+      "id": "e1",
+      "from": "klas",
+      "to": "notif",
+      "label": "severita"
+    },
+    {
+      "id": "e2",
+      "from": "notif",
+      "to": "izol"
+    },
+    {
+      "id": "e3",
+      "from": "izol",
+      "to": "hlas"
+    },
+    {
+      "id": "e4",
+      "from": "hlas",
+      "to": "obn"
+    }
+  ],
+  "mainPath": [
+    "det",
+    "klas",
+    "notif",
+    "izol",
+    "hlas"
+  ],
+  "cards": [
+    {
+      "dot": "rose",
+      "title": "STOP",
+      "items": [
+        "Osobné údaje → DPO · ÚOOÚ 72h",
+        "Utajované → Bezp. · NBÚ bezodkladne",
+        "P1 → CISO + krízový štáb okamžite"
+      ]
+    },
+    {
+      "dot": "cyan",
+      "title": "Log",
+      "items": [
+        "Incident log (imutable)",
+        "Hlásenia orgánov",
+        "Forenzik dôkazy"
+      ]
+    },
+    {
+      "dot": "emerald",
+      "title": "KPI",
+      "items": [
+        "MTTD/MTTR v SLA",
+        "100% P1 eskalovaných < 15 min",
+        "0 incidentov bez tiketu"
+      ]
+    }
+  ]
+}

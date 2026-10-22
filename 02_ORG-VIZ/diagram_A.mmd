@@ -1,0 +1,28 @@
+flowchart TD
+    VZ["VZ<br/>Valné zosťavanie<br/>(akcionári)"] --> DR
+    VZ --> PS
+    DR["DOZORNÁ RADA<br/>kontrolný orgán"] --> PS
+
+    subgraph GOV["VEDENIE"]
+        PS["PREDSTAVENSTVO<br/>štatutár · gestor compliance + bezpečnosť"]
+    end
+
+    subgraph L2["2. LÍNIA — dohľad / compliance (reportujú Predstavenstvu)"]
+        CCO["CCO"]
+        ECO["ECO"]
+        LEG["Legal"]
+        DPO["DPO (ext.)"]
+        BEZ["Bezp. riaditeľ"]
+        CIS["CISO"]
+    end
+
+    subgraph L1["1. LÍNIA — prevádzka"]
+        OBD["Obchod"]; NAK["Nákup"]; VYR["Výroba"]; FIN["Financie"]
+        HR["HR"]; IT["IT"]; KVL["Kvalita"]
+    end
+
+    L3["3. LÍNIA<br/>Interný audit (ext.)"]
+
+    PS --> L1
+    PS --> L2
+    L3 --> DR

@@ -1,0 +1,185 @@
+{
+  "schema_version": 1,
+  "diagram_type": "tree",
+  "meta": {
+    "title": "IOTA Defence — Role register (kto reportuje komu)",
+    "subtitle": "3 línie ochrany · role · podriadenosť. FC-01/FC-02 · NÁVRH · Interné – Dôverné",
+    "output": "roles-register.html",
+    "quality_profile": "showcase"
+  },
+  "nodes": [
+    {
+      "id": "vz",
+      "label": "VZ",
+      "sublabel": "Valné zosťavanie (akcionári)"
+    },
+    {
+      "id": "dr",
+      "label": "DR",
+      "parent": "vz",
+      "sublabel": "Dozorná rada · 3L kontrola"
+    },
+    {
+      "id": "ps",
+      "label": "Predstavenstvo",
+      "parent": "vz",
+      "sublabel": "štatutár · gestor compliance+bezp."
+    },
+    {
+      "id": "ia",
+      "label": "Interný audit",
+      "parent": "dr",
+      "sublabel": "3. línia · externe · správa→DR"
+    },
+    {
+      "id": "l2",
+      "label": "2. LÍNIA",
+      "parent": "ps",
+      "sublabel": "STOP-right · report Predstavenstvu"
+    },
+    {
+      "id": "cco",
+      "label": "CCO",
+      "parent": "l2",
+      "sublabel": "Compliance · ABAC · TPP · whistleblowing"
+    },
+    {
+      "id": "eco",
+      "label": "ECO",
+      "parent": "l2",
+      "sublabel": "Export control · licencie · sankcie"
+    },
+    {
+      "id": "ciso",
+      "label": "CISO",
+      "parent": "l2",
+      "sublabel": "Info-sec · NIS2 · prístupy"
+    },
+    {
+      "id": "bezp",
+      "label": "Bezp. riaditeľ",
+      "parent": "l2",
+      "sublabel": "Utajované · NBÚ · objekty"
+    },
+    {
+      "id": "legal",
+      "label": "Legal",
+      "parent": "l2",
+      "sublabel": "Zmluvy · doložky · ORSR"
+    },
+    {
+      "id": "dpo",
+      "label": "DPO (ext.)",
+      "parent": "l2",
+      "sublabel": "GDPR · čl.30"
+    },
+    {
+      "id": "zop",
+      "label": "Zodp. osoba ozn.",
+      "parent": "l2",
+      "sublabel": "whistleblowing z.54/2019 · stranná CCO"
+    },
+    {
+      "id": "ceo",
+      "label": "CEO",
+      "parent": "ps",
+      "sublabel": "Prevádzka · org poriadok · BCP/DR"
+    },
+    {
+      "id": "l1",
+      "label": "1. LÍNIA",
+      "parent": "ceo",
+      "sublabel": "vlastní riziko denne"
+    },
+    {
+      "id": "cfo",
+      "label": "CFO",
+      "parent": "l1",
+      "sublabel": "Financie · limity L1-L4 · platby"
+    },
+    {
+      "id": "hse",
+      "label": "Vedúci HSE",
+      "parent": "l1",
+      "sublabel": "Výbušniny · sklad · z.58/2014"
+    },
+    {
+      "id": "kv",
+      "label": "Man. kvality",
+      "parent": "l1",
+      "sublabel": "QMS · AQAP 2110 · NCR/CAPA"
+    },
+    {
+      "id": "hr",
+      "label": "HR",
+      "parent": "l1",
+      "sublabel": "Onboarding · školení · cudzinci"
+    },
+    {
+      "id": "it",
+      "label": "IT prevádzka",
+      "parent": "l1",
+      "sublabel": "Infra · backup · identity (oddelená od CISO)"
+    },
+    {
+      "id": "obchod",
+      "label": "Obchod",
+      "parent": "l1",
+      "sublabel": "Predaj · tendre · klienti"
+    },
+    {
+      "id": "nakup",
+      "label": "Nákup",
+      "parent": "l1",
+      "sublabel": "Obstaranie · DD dodávateľov"
+    },
+    {
+      "id": "vyroba",
+      "label": "Výroba",
+      "parent": "l1",
+      "sublabel": "Montáž · prototypy · karanténa"
+    },
+    {
+      "id": "fin",
+      "label": "Financie Ops",
+      "parent": "l1",
+      "sublabel": "Účtovníctvo · výplaty · DPH"
+    }
+  ],
+  "cards": [
+    {
+      "dot": "rose",
+      "title": "STOP-right (2L)",
+      "items": [
+        "CCO · ECO · CISO · Bezp.riaditeľ",
+        "Prelomí len Predstavenstvo + info DR",
+        "Gestor nesmie zodpovedať za predaj (FC-02)"
+      ]
+    },
+    {
+      "dot": "cyan",
+      "title": "Kumulácia",
+      "items": [
+        "1L + 2L u jednej osoby = STOP",
+        "CISO oddelený od IT prevádzky",
+        "Výnimka: len Predstavenstvo (U-06)"
+      ]
+    },
+    {
+      "dot": "emerald",
+      "title": "Klíčová obsadenosť",
+      "items": [
+        "CCO + analytik",
+        "ECO + 2 analytici (z.392/2011 §8)",
+        "Bezp.riaditeľ + osobitné pracovisko"
+      ]
+    }
+  ],
+  "layout": {
+    "direction": "down",
+    "gapX": 40,
+    "gapY": 28,
+    "nodeW": 150,
+    "nodeMaxW": 210
+  }
+}

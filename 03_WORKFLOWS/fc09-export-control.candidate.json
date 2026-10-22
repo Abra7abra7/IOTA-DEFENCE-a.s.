@@ -1,0 +1,237 @@
+{
+  "schema_version": 2,
+  "diagram_type": "workflow",
+  "meta": {
+    "title": "FC-09 · Sankcie a exportná kontrola",
+    "subtitle": "IOTA Defence · Povinný workflow pred každým obchodom: screening → klasifikácia → licencia → clearance → zmluva → expedícia. STOP-right: ECO/CCO → Predstavenstvo.",
+    "animation": "trace",
+    "visual_preset": "signal-flow",
+    "quality_profile": "showcase",
+    "output": "fc09-export-control.html"
+  },
+  "lanes": [
+    {
+      "id": "obchod",
+      "label": "Obchod (1L)"
+    },
+    {
+      "id": "eco",
+      "label": "Exportná kontrola (2L · ECO)"
+    },
+    {
+      "id": "cco",
+      "label": "Compliance / Legal (2L)"
+    },
+    {
+      "id": "fin",
+      "label": "Logistika / Financie"
+    }
+  ],
+  "phases": [
+    {
+      "id": "p0",
+      "label": "Vstup",
+      "fromCol": 0,
+      "toCol": 0
+    },
+    {
+      "id": "p1",
+      "label": "Screening + klasifikácia",
+      "fromCol": 1,
+      "toCol": 1,
+      "variant": "security"
+    },
+    {
+      "id": "p2",
+      "label": "Licencia",
+      "fromCol": 2,
+      "toCol": 2,
+      "variant": "emphasis"
+    },
+    {
+      "id": "p3",
+      "label": "Clearance + zmluva",
+      "fromCol": 3,
+      "toCol": 4,
+      "variant": "security"
+    },
+    {
+      "id": "p4",
+      "label": "Dodávka",
+      "fromCol": 5,
+      "toCol": 5,
+      "variant": "dashed"
+    }
+  ],
+  "groups": [],
+  "mainPath": [
+    "zapis",
+    "screening",
+    "klas",
+    "cleared",
+    "ship",
+    "spis"
+  ],
+  "nodes": [
+    {
+      "id": "zapis",
+      "lane": "obchod",
+      "col": 0,
+      "type": "frontend",
+      "label": "Zápis obchodu",
+      "sublabel": "karta obchodu",
+      "width": 132
+    },
+    {
+      "id": "screening",
+      "lane": "eco",
+      "col": 1,
+      "type": "security",
+      "label": "Screening + embargá",
+      "sublabel": "partner · EUC · 50% OFAC",
+      "width": 132
+    },
+    {
+      "id": "klas",
+      "lane": "eco",
+      "col": 2,
+      "type": "backend",
+      "label": "Klasifikácia + licencia",
+      "sublabel": "ML/dual-use · MH SR",
+      "width": 168
+    },
+    {
+      "id": "redflags",
+      "lane": "cco",
+      "col": 2,
+      "type": "security",
+      "label": "Red flags + catch-all",
+      "sublabel": "CCO review",
+      "width": 168
+    },
+    {
+      "id": "cleared",
+      "lane": "eco",
+      "col": 3,
+      "type": "security",
+      "label": "EXPORT CLEARANCE",
+      "sublabel": "SCHVÁLENÉ / STOP",
+      "tag": "STOP-right",
+      "width": 132
+    },
+    {
+      "id": "zmluva",
+      "lane": "cco",
+      "col": 5,
+      "type": "database",
+      "label": "Zmluva",
+      "sublabel": "no-Russia · EUC · audit",
+      "width": 132
+    },
+    {
+      "id": "ship",
+      "lane": "fin",
+      "col": 3,
+      "type": "messagebus",
+      "label": "Pre-shipment",
+      "sublabel": "4-eyes · proti faktúre",
+      "width": 132
+    },
+    {
+      "id": "spis",
+      "lane": "fin",
+      "col": 5,
+      "type": "database",
+      "label": "Spis + hlásenia",
+      "sublabel": "MH SR kvartálne",
+      "width": 132
+    }
+  ],
+  "edges": [
+    {
+      "id": "e1",
+      "from": "zapis",
+      "to": "screening"
+    },
+    {
+      "id": "e2",
+      "from": "screening",
+      "to": "klas"
+    },
+    {
+      "id": "e3",
+      "from": "klas",
+      "to": "cleared"
+    },
+    {
+      "id": "e4",
+      "from": "redflags",
+      "to": "cleared",
+      "label": "OK",
+      "variant": "security"
+    },
+    {
+      "id": "e5",
+      "from": "klas",
+      "to": "redflags",
+      "label": "review",
+      "variant": "dashed"
+    },
+    {
+      "id": "e6",
+      "from": "cleared",
+      "to": "zmluva",
+      "label": "SCHVÁLENÉ"
+    },
+    {
+      "id": "e7",
+      "from": "cleared",
+      "to": "ship",
+      "label": "dvuch",
+      "variant": "dashed"
+    },
+    {
+      "id": "e8",
+      "from": "ship",
+      "to": "spis"
+    },
+    {
+      "id": "e9",
+      "from": "zmluva",
+      "to": "ship",
+      "label": "podpis"
+    }
+  ],
+  "cards": [
+    {
+      "dot": "rose",
+      "title": "STOP pravidlá",
+      "items": [
+        "Bez export clearance = STOP expedície",
+        "Výnimka z licencie = nemožné",
+        "Sankčný MATCH = STOP + eskalácia Predstavenstvu",
+        "Vočni znaky (zmluva/uroceľ) = STOP + CCO"
+      ]
+    },
+    {
+      "dot": "cyan",
+      "title": "Logging",
+      "items": [
+        "Register licencií (10 r.)",
+        "Register klasifikácie BOM (5 r.)",
+        "Screening log — imutable",
+        "]",
+        "Spis: 10 r. uchovávanie"
+      ]
+    },
+    {
+      "dot": "emerald",
+      "title": "KPI",
+      "items": [
+        "100% obchodov má EUC + licenciu pred expedíciou",
+        "0 nesankčných incidentov",
+        "Screening < 1 prac. deň"
+      ]
+    }
+  ]
+}

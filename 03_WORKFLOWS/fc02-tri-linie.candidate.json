@@ -1,0 +1,184 @@
+{
+  "schema_version": 2,
+  "diagram_type": "workflow",
+  "meta": {
+    "title": "FC-02 · Tri línie ochrany",
+    "subtitle": "1.línia prevádzka vlastní riziko → 2.línia dohľad/STOP-right → 3.línia interný audit → Predstavenstvo+DR schvaľujú.",
+    "animation": "trace",
+    "visual_preset": "signal-flow",
+    "quality_profile": "standard",
+    "output": "fc02-tri-linie.html",
+    "viewBox": [
+      1314,
+      760
+    ]
+  },
+  "lanes": [
+    {
+      "id": "l1",
+      "label": "Iniciátor / Vlastník"
+    },
+    {
+      "id": "l2",
+      "label": "Vykonávateľ (1L)"
+    },
+    {
+      "id": "l3",
+      "label": "Dohľad / Schválenie (2L)"
+    },
+    {
+      "id": "l4",
+      "label": "Log / Výstup"
+    }
+  ],
+  "phases": [
+    {
+      "id": "p0",
+      "label": "Prevádzka (1L)",
+      "fromCol": 0,
+      "toCol": 3
+    },
+    {
+      "id": "p1",
+      "label": "Dohľad (2L)",
+      "fromCol": 5,
+      "toCol": 5,
+      "variant": "security"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "l1",
+      "lane": "l2",
+      "col": 0,
+      "type": "frontend",
+      "label": "1. Línia prevádzka",
+      "width": 367
+    },
+    {
+      "id": "r",
+      "lane": "l2",
+      "col": 1,
+      "type": "backend",
+      "label": "Vlastní riziká",
+      "sublabel": "vlastní riziko",
+      "width": 150
+    },
+    {
+      "id": "l2n",
+      "lane": "l3",
+      "col": 2,
+      "type": "security",
+      "label": "2. Línia dohľad",
+      "sublabel": "2L dohľad",
+      "tag": "STOP-right",
+      "width": 263
+    },
+    {
+      "id": "p",
+      "lane": "l3",
+      "col": 3,
+      "type": "security",
+      "label": "Politiky + monitor",
+      "width": 211
+    },
+    {
+      "id": "l3n",
+      "lane": "l4",
+      "col": 3,
+      "type": "database",
+      "label": "3. Línia interný audit",
+      "sublabel": "interný audit",
+      "width": 169.0
+    },
+    {
+      "id": "dr",
+      "lane": "l1",
+      "col": 5,
+      "type": "external",
+      "label": "Predstavenstvo + DR",
+      "width": 178
+    },
+    {
+      "id": "uzn",
+      "lane": "l4",
+      "col": 2,
+      "type": "database",
+      "label": "Uznesenie",
+      "sublabel": "report DR",
+      "tag": "DONE",
+      "width": 150
+    }
+  ],
+  "edges": [
+    {
+      "id": "e0",
+      "from": "l1",
+      "to": "r"
+    },
+    {
+      "id": "e1",
+      "from": "r",
+      "to": "l2n",
+      "label": "riziko/incident"
+    },
+    {
+      "id": "e2",
+      "from": "l2n",
+      "to": "p",
+      "label": "STOP/eskalácia"
+    },
+    {
+      "id": "e3",
+      "from": "p",
+      "to": "dr"
+    },
+    {
+      "id": "e4",
+      "from": "l2n",
+      "to": "l3n",
+      "label": "audit task"
+    },
+    {
+      "id": "e5",
+      "from": "l3n",
+      "to": "uzn",
+      "label": "správa IA"
+    }
+  ],
+  "mainPath": [
+    "l1",
+    "r",
+    "l2n",
+    "p"
+  ],
+  "cards": [
+    {
+      "dot": "rose",
+      "title": "STOP",
+      "items": [
+        "Kumulácia 1L+2L u jednej osoby = STOP",
+        "Gestor nesmie zodpovedať za predaj",
+        "Veto CCO/Bezp. → len Predstavenstvo prelomí"
+      ]
+    },
+    {
+      "dot": "cyan",
+      "title": "Log",
+      "items": [
+        "Compliance register",
+        "Audit správy",
+        "Uznesenia"
+      ]
+    },
+    {
+      "dot": "emerald",
+      "title": "KPI",
+      "items": [
+        "Štvrťročny report 2L",
+        "Ročný audit 3L",
+        "0 kumulácií línii"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,137 @@
+{
+  "schema_version": 2,
+  "diagram_type": "workflow",
+  "meta": {
+    "title": "FC-14 · Logging / monitoring / eskalácia",
+    "subtitle": "Alert → triáž P1-P4 → reakcia podľa SLA → eskalácia IR/BCP.",
+    "animation": "trace",
+    "visual_preset": "signal-flow",
+    "quality_profile": "showcase",
+    "output": "fc14-logging.html"
+  },
+  "lanes": [
+    {
+      "id": "l1",
+      "label": "Iniciátor / Vlastník"
+    },
+    {
+      "id": "l2",
+      "label": "Vykonávateľ (1L)"
+    },
+    {
+      "id": "l3",
+      "label": "Dohľad / Schválenie (2L)"
+    },
+    {
+      "id": "l4",
+      "label": "Log / Výstup"
+    }
+  ],
+  "phases": [
+    {
+      "id": "p0",
+      "label": "Detekcia",
+      "fromCol": 0,
+      "toCol": 2
+    },
+    {
+      "id": "p1",
+      "label": "Triáž",
+      "fromCol": 5,
+      "toCol": 5,
+      "variant": "security"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "alert",
+      "lane": "l2",
+      "col": 0,
+      "type": "frontend",
+      "label": "Detekcia alertu",
+      "sublabel": "SIEM/SOC/IT",
+      "width": 150
+    },
+    {
+      "id": "tria",
+      "lane": "l3",
+      "col": 1,
+      "type": "security",
+      "label": "Triáž P1-P4",
+      "sublabel": "SOC/IT/CISO",
+      "tag": "P1: break-glass/admin/ransomvér",
+      "width": 221
+    },
+    {
+      "id": "reak",
+      "lane": "l2",
+      "col": 2,
+      "type": "backend",
+      "label": "Reakcia podľa SLA",
+      "sublabel": "CISO/IT · opatrenie",
+      "width": 150
+    },
+    {
+      "id": "esc",
+      "lane": "l4",
+      "col": 5,
+      "type": "database",
+      "label": "Eskalácia IR/BCP",
+      "sublabel": "CISO/gestor",
+      "width": 150
+    }
+  ],
+  "edges": [
+    {
+      "id": "e0",
+      "from": "alert",
+      "to": "tria",
+      "label": "ticket"
+    },
+    {
+      "id": "e1",
+      "from": "tria",
+      "to": "reak",
+      "label": "priorita"
+    },
+    {
+      "id": "e2",
+      "from": "reak",
+      "to": "esc",
+      "label": "P1+"
+    }
+  ],
+  "mainPath": [
+    "alert",
+    "tria",
+    "reak"
+  ],
+  "cards": [
+    {
+      "dot": "rose",
+      "title": "STOP",
+      "items": [
+        "P1: break-glass/global admin/IBAN bez 4-eyes/ransomvér",
+        "P2: výpadok zberu logov kritického zdroja"
+      ]
+    },
+    {
+      "dot": "cyan",
+      "title": "Log",
+      "items": [
+        "Alert log (SIEM)",
+        "Triáž ticket",
+        "SLA overenie"
+      ]
+    },
+    {
+      "dot": "emerald",
+      "title": "KPI",
+      "items": [
+        "MTTA v SLA",
+        "100% P1 < 15 min",
+        "0 alertov bez triáže"
+      ]
+    }
+  ]
+}

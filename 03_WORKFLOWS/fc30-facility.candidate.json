@@ -1,0 +1,175 @@
+{
+  "schema_version": 2,
+  "diagram_type": "workflow",
+  "meta": {
+    "title": "FC-30 · Budova a objektová údržba",
+    "subtitle": "Plán údržby + revízií → požiadavky/havárie → oprava → revízie → chránené priestory → report.",
+    "animation": "trace",
+    "visual_preset": "signal-flow",
+    "quality_profile": "showcase",
+    "output": "fc30-facility.html"
+  },
+  "lanes": [
+    {
+      "id": "l1",
+      "label": "Iniciátor (1L)"
+    },
+    {
+      "id": "l2",
+      "label": "Vykonávateľ (1L)"
+    },
+    {
+      "id": "l3",
+      "label": "Dohľad / Schválenie (2L)"
+    },
+    {
+      "id": "l4",
+      "label": "Registre / Výstup"
+    }
+  ],
+  "phases": [
+    {
+      "id": "p0",
+      "label": "Plán",
+      "fromCol": 0,
+      "toCol": 5
+    }
+  ],
+  "nodes": [
+    {
+      "id": "plan",
+      "lane": "l2",
+      "col": 0,
+      "type": "frontend",
+      "label": "Plán údržby + revízií",
+      "sublabel": "ročný",
+      "width": 160.5
+    },
+    {
+      "id": "tick",
+      "lane": "l1",
+      "col": 1,
+      "type": "messagebus",
+      "label": "Požiadavka / havária",
+      "sublabel": "tiket",
+      "width": 154.0
+    },
+    {
+      "id": "tria",
+      "lane": "l3",
+      "col": 2,
+      "type": "security",
+      "label": "Triáž",
+      "sublabel": "priorita · chránené priestory",
+      "width": 204
+    },
+    {
+      "id": "opr",
+      "lane": "l2",
+      "col": 3,
+      "type": "backend",
+      "label": "Oprava + záznam",
+      "sublabel": "zásah",
+      "width": 148
+    },
+    {
+      "id": "rev",
+      "lane": "l3",
+      "col": 4,
+      "type": "security",
+      "label": "Revízie",
+      "sublabel": "elektro · PO · výťahy",
+      "tag": "STOP: po termíne odstaviť",
+      "width": 182
+    },
+    {
+      "id": "chr",
+      "lane": "l3",
+      "col": 5,
+      "type": "security",
+      "label": "Kontrola chránených priestorov",
+      "sublabel": "Bezp. riaditeľ",
+      "width": 219.0
+    },
+    {
+      "id": "rep",
+      "lane": "l4",
+      "col": 5,
+      "type": "database",
+      "label": "Kvartálny report",
+      "sublabel": "náklady",
+      "tag": "DONE",
+      "width": 148
+    }
+  ],
+  "edges": [
+    {
+      "id": "e0",
+      "from": "plan",
+      "to": "tick"
+    },
+    {
+      "id": "e1",
+      "from": "tick",
+      "to": "tria"
+    },
+    {
+      "id": "e2",
+      "from": "tria",
+      "to": "opr",
+      "label": "opraviť"
+    },
+    {
+      "id": "e3",
+      "from": "opr",
+      "to": "rev"
+    },
+    {
+      "id": "e4",
+      "from": "rev",
+      "to": "chr"
+    },
+    {
+      "id": "e5",
+      "from": "chr",
+      "to": "rep"
+    }
+  ],
+  "mainPath": [
+    "plan",
+    "tick",
+    "tria",
+    "opr",
+    "rev",
+    "chr"
+  ],
+  "cards": [
+    {
+      "dot": "rose",
+      "title": "STOP",
+      "items": [
+        "Revízia po termíne = odstaviť",
+        "Prístup do chránených bez kontroly = STOP",
+        "Havária P1 = okamžite"
+      ]
+    },
+    {
+      "dot": "cyan",
+      "title": "Log",
+      "items": [
+        "Facility register",
+        "Revízny register",
+        "Havarijný denník"
+      ]
+    },
+    {
+      "dot": "emerald",
+      "title": "KPI",
+      "items": [
+        "100% revízií v termíne",
+        "0 nevybavených P1",
+        "Náklady v rozpočte"
+      ]
+    }
+  ]
+}

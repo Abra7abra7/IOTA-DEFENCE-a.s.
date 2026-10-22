@@ -1,0 +1,193 @@
+{
+  "schema_version": 2,
+  "diagram_type": "workflow",
+  "meta": {
+    "title": "FC-16 · Rozhodovanie o agentovi (AI gated)",
+    "subtitle": "Request → register+scope check → policy engine → gated? → human ANO / auto-draft → immutable audit → execute/deny.",
+    "animation": "trace",
+    "visual_preset": "signal-flow",
+    "quality_profile": "standard",
+    "output": "fc16-agent.html",
+    "viewBox": [
+      1240,
+      660
+    ]
+  },
+  "lanes": [
+    {
+      "id": "l1",
+      "label": "Iniciátor / Vlastník"
+    },
+    {
+      "id": "l2",
+      "label": "Vykonávateľ (1L)"
+    },
+    {
+      "id": "l3",
+      "label": "Dohľad / Schválenie (2L)"
+    },
+    {
+      "id": "l4",
+      "label": "Log / Výstup"
+    }
+  ],
+  "phases": [
+    {
+      "id": "p0",
+      "label": "Request",
+      "fromCol": 0,
+      "toCol": 0
+    },
+    {
+      "id": "p1",
+      "label": "Policy gate",
+      "fromCol": 1,
+      "toCol": 3,
+      "variant": "security"
+    },
+    {
+      "id": "p2",
+      "label": "Audit + execute",
+      "fromCol": 4,
+      "toCol": 4,
+      "variant": "emphasis"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "req",
+      "lane": "l2",
+      "col": 0,
+      "type": "frontend",
+      "label": "Request + agent_id",
+      "width": 150
+    },
+    {
+      "id": "scope",
+      "lane": "l3",
+      "col": 1,
+      "type": "security",
+      "label": "Register + scope?",
+      "tag": "mimo → DENY + ticket",
+      "width": 188.5
+    },
+    {
+      "id": "pol",
+      "lane": "l3",
+      "col": 2,
+      "type": "security",
+      "label": "Policy engine evaluate",
+      "width": 150
+    },
+    {
+      "id": "gate",
+      "lane": "l3",
+      "col": 3,
+      "type": "security",
+      "label": "Gated akcia?",
+      "tag": "ÁNO → ľudské ANO",
+      "width": 150
+    },
+    {
+      "id": "human",
+      "lane": "l3",
+      "col": 4,
+      "type": "security",
+      "label": "Ľudské ANO",
+      "tag": "nie/timeout → DENY",
+      "width": 150
+    },
+    {
+      "id": "aud",
+      "lane": "l4",
+      "col": 4,
+      "type": "database",
+      "label": "Immutable audit",
+      "tag": "DONE",
+      "width": 150
+    },
+    {
+      "id": "exec",
+      "lane": "l4",
+      "col": 5,
+      "type": "database",
+      "label": "Execute / Deny",
+      "tag": "DONE",
+      "width": 150
+    }
+  ],
+  "edges": [
+    {
+      "id": "e0",
+      "from": "req",
+      "to": "scope"
+    },
+    {
+      "id": "e1",
+      "from": "scope",
+      "to": "pol",
+      "label": "Áno"
+    },
+    {
+      "id": "e2",
+      "from": "pol",
+      "to": "gate",
+      "label": "ESCALATE na gated"
+    },
+    {
+      "id": "e3",
+      "from": "gate",
+      "to": "human",
+      "label": "gated → ľudské"
+    },
+    {
+      "id": "e5",
+      "from": "human",
+      "to": "aud",
+      "label": "ANO"
+    },
+    {
+      "id": "e7",
+      "from": "aud",
+      "to": "exec"
+    }
+  ],
+  "mainPath": [
+    "req",
+    "scope",
+    "pol",
+    "gate",
+    "human",
+    "aud",
+    "exec"
+  ],
+  "cards": [
+    {
+      "dot": "rose",
+      "title": "STOP",
+      "items": [
+        "DENY → vždy ticket; nikdy silent continue",
+        "Platba/send/merge/sanctions write → vždy ľudské ANO",
+        "AML/export → dual control (2 ľudia)"
+      ]
+    },
+    {
+      "dot": "cyan",
+      "title": "Log",
+      "items": [
+        "Audit store (imutable)",
+        "Register agentov",
+        "Correlation_id"
+      ]
+    },
+    {
+      "dot": "emerald",
+      "title": "KPI",
+      "items": [
+        "100% gated s ľudským ANO",
+        "0 tichých continue",
+        "100% immutable audit"
+      ]
+    }
+  ]
+}

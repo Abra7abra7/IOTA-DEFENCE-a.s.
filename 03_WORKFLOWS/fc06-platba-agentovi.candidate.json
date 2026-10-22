@@ -1,0 +1,166 @@
+{
+  "schema_version": 2,
+  "diagram_type": "workflow",
+  "meta": {
+    "title": "FC-06 · Platba agentovi",
+    "subtitle": "Overenie stavu partnera → doklad výkonu → IBAN check → 4-eyes autorizácia → platba.",
+    "animation": "trace",
+    "visual_preset": "signal-flow",
+    "quality_profile": "showcase",
+    "output": "fc06-platba-agentovi.html"
+  },
+  "lanes": [
+    {
+      "id": "l1",
+      "label": "Iniciátor / Vlastník"
+    },
+    {
+      "id": "l2",
+      "label": "Vykonávateľ (1L)"
+    },
+    {
+      "id": "l3",
+      "label": "Dohľad / Schválenie (2L)"
+    },
+    {
+      "id": "l4",
+      "label": "Log / Výstup"
+    }
+  ],
+  "phases": [
+    {
+      "id": "p0",
+      "label": "Overenie",
+      "fromCol": 0,
+      "toCol": 5,
+      "variant": "security"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "stav",
+      "lane": "l3",
+      "col": 0,
+      "type": "security",
+      "label": "Overenie stavu partnera",
+      "sublabel": "register: SCHVÁLENÝ?",
+      "tag": "STOP: nie schválený",
+      "width": 175.5
+    },
+    {
+      "id": "dokl",
+      "lane": "l2",
+      "col": 1,
+      "type": "database",
+      "label": "Doklad výkonu + faktúra",
+      "sublabel": "správa / zápisnica",
+      "width": 175.5
+    },
+    {
+      "id": "iban",
+      "lane": "l3",
+      "col": 2,
+      "type": "security",
+      "label": "IBAN check",
+      "sublabel": "na meno agenta v krajine sídla",
+      "tag": "STOP: nova krajina",
+      "width": 211
+    },
+    {
+      "id": "autor",
+      "lane": "l3",
+      "col": 3,
+      "type": "security",
+      "label": "Autorizácia 4-eyes",
+      "sublabel": "zadanie ≠ autorizácia",
+      "tag": "nad limit → CCO/L4",
+      "width": 152
+    },
+    {
+      "id": "plat",
+      "lane": "l2",
+      "col": 4,
+      "type": "database",
+      "label": "Platba schválená",
+      "sublabel": "ERP + banka",
+      "width": 150
+    },
+    {
+      "id": "reg",
+      "lane": "l4",
+      "col": 5,
+      "type": "database",
+      "label": "Register platieb agentom",
+      "sublabel": "evidencia 10 r.",
+      "tag": "DONE",
+      "width": 182.0
+    }
+  ],
+  "edges": [
+    {
+      "id": "e0",
+      "from": "stav",
+      "to": "dokl",
+      "label": "SCHVÁLENÝ"
+    },
+    {
+      "id": "e1",
+      "from": "dokl",
+      "to": "iban",
+      "label": "faktúra kompletná"
+    },
+    {
+      "id": "e2",
+      "from": "iban",
+      "to": "autor",
+      "label": "IBAN overený"
+    },
+    {
+      "id": "e3",
+      "from": "autor",
+      "to": "plat"
+    },
+    {
+      "id": "e4",
+      "from": "plat",
+      "to": "reg"
+    }
+  ],
+  "mainPath": [
+    "stav",
+    "dokl",
+    "iban",
+    "autor",
+    "plat"
+  ],
+  "cards": [
+    {
+      "dot": "rose",
+      "title": "STOP",
+      "items": [
+        "Hotovosť = STOP",
+        "Platba tretej osobe/iná krajina = STOP",
+        "Bez dokladu = STOP",
+        "Nový IBAN bez overenia = STOP"
+      ]
+    },
+    {
+      "dot": "cyan",
+      "title": "Log",
+      "items": [
+        "Register platieb agentom (10 r.)",
+        "ERP záznam",
+        "Bank log"
+      ]
+    },
+    {
+      "dot": "emerald",
+      "title": "KPI",
+      "items": [
+        "100% agentov SCHVÁLENÝ",
+        "100% platieb 4-eyes",
+        "0 platieb mimo reťazca"
+      ]
+    }
+  ]
+}

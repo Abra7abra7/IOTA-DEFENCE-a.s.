@@ -1,0 +1,164 @@
+{
+  "schema_version": 2,
+  "diagram_type": "workflow",
+  "meta": {
+    "title": "FC-19 · Evidencia pracovných pomôcok (majetok)",
+    "subtitle": "Príjem pomôcky → zápis → odovzdanie → servis → inventarizácia → vyradenie.",
+    "animation": "trace",
+    "visual_preset": "signal-flow",
+    "quality_profile": "showcase",
+    "output": "fc19-pracovne-pomocky.html"
+  },
+  "lanes": [
+    {
+      "id": "l1",
+      "label": "Iniciátor (1L)"
+    },
+    {
+      "id": "l2",
+      "label": "Vykonávateľ (1L)"
+    },
+    {
+      "id": "l3",
+      "label": "Dohľad / Schválenie (2L)"
+    },
+    {
+      "id": "l4",
+      "label": "Registre / Výstup"
+    }
+  ],
+  "phases": [
+    {
+      "id": "p0",
+      "label": "Príjem",
+      "fromCol": 0,
+      "toCol": 3
+    },
+    {
+      "id": "p1",
+      "label": "Evidencia a odovzdanie",
+      "fromCol": 5,
+      "toCol": 5
+    }
+  ],
+  "nodes": [
+    {
+      "id": "in",
+      "lane": "l2",
+      "col": 0,
+      "type": "messagebus",
+      "label": "Príjem pomôcky",
+      "sublabel": "nákup FC-18 · dar · presun",
+      "width": 185
+    },
+    {
+      "id": "reg",
+      "lane": "l4",
+      "col": 1,
+      "type": "database",
+      "label": "Zápis do evidencie",
+      "sublabel": "ID · kat. · hodnota · zodpovednosť",
+      "width": 237
+    },
+    {
+      "id": "proto",
+      "lane": "l1",
+      "col": 2,
+      "type": "database",
+      "label": "Odovzdanie protokol",
+      "sublabel": "zamestnancovi",
+      "width": 147
+    },
+    {
+      "id": "serv",
+      "lane": "l2",
+      "col": 3,
+      "type": "database",
+      "label": "Servis / oprava",
+      "sublabel": "záznam",
+      "width": 132
+    },
+    {
+      "id": "inv",
+      "lane": "l3",
+      "col": 5,
+      "type": "security",
+      "label": "Ročná inventarizácia",
+      "sublabel": "fyzická kontrola",
+      "width": 154
+    },
+    {
+      "id": "out",
+      "lane": "l3",
+      "col": 0,
+      "type": "database",
+      "label": "Vyradenie / škoda",
+      "sublabel": "rozhodnutie CFO",
+      "tag": "DONE",
+      "width": 134
+    }
+  ],
+  "edges": [
+    {
+      "id": "e0",
+      "from": "in",
+      "to": "reg"
+    },
+    {
+      "id": "e1",
+      "from": "reg",
+      "to": "proto"
+    },
+    {
+      "id": "e2",
+      "from": "proto",
+      "to": "serv"
+    },
+    {
+      "id": "e3",
+      "from": "serv",
+      "to": "inv"
+    },
+    {
+      "id": "e4",
+      "from": "inv",
+      "to": "out"
+    }
+  ],
+  "mainPath": [
+    "in",
+    "reg",
+    "proto",
+    "serv"
+  ],
+  "cards": [
+    {
+      "dot": "rose",
+      "title": "STOP",
+      "items": [
+        "Bez evidencie = nepoužívať",
+        "Škoda hlásená do 48h",
+        "Inventarizačný rozdiel → vyšetrenie"
+      ]
+    },
+    {
+      "dot": "cyan",
+      "title": "Log",
+      "items": [
+        "Majetková evidencia",
+        "Servisný register",
+        "Register škôd"
+      ]
+    },
+    {
+      "dot": "emerald",
+      "title": "KPI",
+      "items": [
+        "100% pomôcok v evidencii",
+        "Inventúra 2×/rok",
+        "0 neevidovaných zariadení"
+      ]
+    }
+  ],
+  "groups": []
+}

@@ -1,0 +1,6 @@
+Vlastnosť,Betaflight,INAV,ArduPilot
+Primárne zameranie,"FPV Freestyle, Preteky","Long-range, GPS lety","Plná autonómia, Priemysel"
+Náročnosť nastavenia,Nízka / Stredná,Stredná,Vysoká
+Autonómny let (Trasy),Nie,Áno (Základný),Áno (Veľmi pokročilý)
+Podpora pre AI / RPi,Žiadna / Zlá,Čiastočná,Vynikajúca (MAVLink)
+Vhodný pre tvoj zoznam,Nie,Možno,Áno (vyžaduje silnejší čip FC)

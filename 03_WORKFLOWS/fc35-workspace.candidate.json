@@ -1,0 +1,160 @@
+{
+  "schema_version": 2,
+  "diagram_type": "workflow",
+  "meta": {
+    "title": "FC-35 · Workspace a vybavenie",
+    "subtitle": "Požiadavka → schválenie → obstaranie → evidencia/odovzdanie → ergonómia → údržba.",
+    "animation": "trace",
+    "visual_preset": "signal-flow",
+    "quality_profile": "showcase",
+    "output": "fc35-workspace.html"
+  },
+  "lanes": [
+    {
+      "id": "l1",
+      "label": "Iniciátor (1L)"
+    },
+    {
+      "id": "l2",
+      "label": "Vykonávateľ (1L)"
+    },
+    {
+      "id": "l3",
+      "label": "Dohľad / Schválenie (2L)"
+    },
+    {
+      "id": "l4",
+      "label": "Registre / Výstup"
+    }
+  ],
+  "phases": [
+    {
+      "id": "p0",
+      "label": "Vstup",
+      "fromCol": 0,
+      "toCol": 5
+    }
+  ],
+  "nodes": [
+    {
+      "id": "poz",
+      "lane": "l1",
+      "col": 0,
+      "type": "frontend",
+      "label": "Požiadavka",
+      "sublabel": "vybavenie · nábytok · PPE",
+      "width": 178
+    },
+    {
+      "id": "sch",
+      "lane": "l3",
+      "col": 1,
+      "type": "security",
+      "label": "Schválenie",
+      "sublabel": "podľa kategórie a limitu",
+      "tag": "STOP: nad limit",
+      "width": 172
+    },
+    {
+      "id": "nak",
+      "lane": "l2",
+      "col": 2,
+      "type": "backend",
+      "label": "Obstaranie (FC-18)",
+      "sublabel": "nákup komponentu",
+      "width": 148
+    },
+    {
+      "id": "evid",
+      "lane": "l4",
+      "col": 3,
+      "type": "database",
+      "label": "Evidencia + odovzdanie",
+      "sublabel": "FC-19 majetok",
+      "width": 167.0
+    },
+    {
+      "id": "erg",
+      "lane": "l3",
+      "col": 4,
+      "type": "security",
+      "label": "Ergonómia / BOZP",
+      "sublabel": "HSE kontrola",
+      "width": 148
+    },
+    {
+      "id": "udr",
+      "lane": "l4",
+      "col": 5,
+      "type": "database",
+      "label": "Údržba / obnova",
+      "sublabel": "záznam",
+      "tag": "DONE",
+      "width": 148
+    }
+  ],
+  "edges": [
+    {
+      "id": "e0",
+      "from": "poz",
+      "to": "sch"
+    },
+    {
+      "id": "e1",
+      "from": "sch",
+      "to": "nak",
+      "label": "OK"
+    },
+    {
+      "id": "e2",
+      "from": "nak",
+      "to": "evid"
+    },
+    {
+      "id": "e3",
+      "from": "evid",
+      "to": "erg"
+    },
+    {
+      "id": "e4",
+      "from": "erg",
+      "to": "udr"
+    }
+  ],
+  "mainPath": [
+    "poz",
+    "sch",
+    "nak",
+    "evid",
+    "erg"
+  ],
+  "cards": [
+    {
+      "dot": "rose",
+      "title": "STOP",
+      "items": [
+        "Nad limit bez schválenia = STOP",
+        "Uvoľnenie bez evidencie = STOP",
+        "Ergonomicky nevhodné = nahlásiť HSE"
+      ]
+    },
+    {
+      "dot": "cyan",
+      "title": "Log",
+      "items": [
+        "Register vybavenia",
+        "Facility register",
+        "BOZP záznamy"
+      ]
+    },
+    {
+      "dot": "emerald",
+      "title": "KPI",
+      "items": [
+        "100% vybavenia evidované",
+        "Obstaranie < 5 dní",
+        "0 BOZP odchýlok"
+      ]
+    }
+  ]
+}

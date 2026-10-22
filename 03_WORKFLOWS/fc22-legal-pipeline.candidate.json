@@ -1,0 +1,167 @@
+{
+  "schema_version": 2,
+  "diagram_type": "workflow",
+  "meta": {
+    "title": "FC-22 · Právne oddelenie (Legal pipeline)",
+    "subtitle": "Právny request → kategorizácia → review (legal/compliance/export) → vzorové doložky → schválenie → spis.",
+    "animation": "trace",
+    "visual_preset": "signal-flow",
+    "quality_profile": "showcase",
+    "output": "fc22-legal-pipeline.html"
+  },
+  "lanes": [
+    {
+      "id": "l1",
+      "label": "Iniciátor (1L)"
+    },
+    {
+      "id": "l2",
+      "label": "Vykonávateľ (1L)"
+    },
+    {
+      "id": "l3",
+      "label": "Dohľad / Schválenie (2L)"
+    },
+    {
+      "id": "l4",
+      "label": "Registre / Výstup"
+    }
+  ],
+  "phases": [
+    {
+      "id": "p0",
+      "label": "Vstup",
+      "fromCol": 0,
+      "toCol": 3
+    },
+    {
+      "id": "p1",
+      "label": "Kategorizácia + review",
+      "fromCol": 5,
+      "toCol": 5,
+      "variant": "security"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "req",
+      "lane": "l1",
+      "col": 0,
+      "type": "frontend",
+      "label": "Právny request",
+      "sublabel": "zmluva · doložka · posúdenie · spor",
+      "width": 243
+    },
+    {
+      "id": "kat",
+      "lane": "l3",
+      "col": 1,
+      "type": "database",
+      "label": "Kategorizácia",
+      "sublabel": "zmluva/šablóna/posúdenie/spor",
+      "width": 204
+    },
+    {
+      "id": "rev",
+      "lane": "l2",
+      "col": 2,
+      "type": "database",
+      "label": "Legal + CCO/ECO review",
+      "sublabel": "kontraktačné · compliance · export",
+      "width": 237
+    },
+    {
+      "id": "adv",
+      "lane": "l4",
+      "col": 3,
+      "type": "security",
+      "label": "Advokát (vzory)",
+      "sublabel": "kontrola doložiek IOTA-CON",
+      "width": 185
+    },
+    {
+      "id": "sign",
+      "lane": "l3",
+      "col": 5,
+      "type": "security",
+      "label": "Schválenie L1-L4",
+      "sublabel": "sign-off podľa limitu",
+      "width": 152
+    },
+    {
+      "id": "spis",
+      "lane": "l4",
+      "col": 5,
+      "type": "database",
+      "label": "Archivácia + register",
+      "sublabel": "termíny · obnovy",
+      "tag": "DONE",
+      "width": 160
+    }
+  ],
+  "edges": [
+    {
+      "id": "e0",
+      "from": "req",
+      "to": "kat"
+    },
+    {
+      "id": "e1",
+      "from": "kat",
+      "to": "rev"
+    },
+    {
+      "id": "e2",
+      "from": "rev",
+      "to": "adv"
+    },
+    {
+      "id": "e3",
+      "from": "adv",
+      "to": "sign",
+      "label": "šablóna OK",
+      "variant": "default"
+    },
+    {
+      "id": "e4",
+      "from": "sign",
+      "to": "spis"
+    }
+  ],
+  "mainPath": [
+    "req",
+    "kat",
+    "rev",
+    "adv"
+  ],
+  "cards": [
+    {
+      "dot": "rose",
+      "title": "STOP",
+      "items": [
+        "Ústna dohoda = nie",
+        "Doložka mimo vzoru = advokát",
+        "Schválenie pod limit = STOP"
+      ]
+    },
+    {
+      "dot": "cyan",
+      "title": "Log",
+      "items": [
+        "Zmluvný register",
+        "Právna agenda",
+        "Register sporov + termíny"
+      ]
+    },
+    {
+      "dot": "emerald",
+      "title": "KPI",
+      "items": [
+        "100% zmlúv cez legal",
+        "0 ústnych dohôd",
+        "100% termínov dodržaných"
+      ]
+    }
+  ],
+  "groups": []
+}

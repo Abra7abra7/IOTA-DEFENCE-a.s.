@@ -1,0 +1,154 @@
+{
+  "schema_version": 2,
+  "diagram_type": "workflow",
+  "meta": {
+    "title": "FC-05 · Dátové zóny a prístup",
+    "subtitle": "Určiť zónu → schválenie podľa matice → IAM skupina + MFA → recertifikácia/offboarding.",
+    "animation": "trace",
+    "visual_preset": "signal-flow",
+    "quality_profile": "showcase",
+    "output": "fc05-datove-zony.html"
+  },
+  "lanes": [
+    {
+      "id": "l1",
+      "label": "Iniciátor / Vlastník"
+    },
+    {
+      "id": "l2",
+      "label": "Vykonávateľ (1L)"
+    },
+    {
+      "id": "l3",
+      "label": "Dohľad / Schválenie (2L)"
+    },
+    {
+      "id": "l4",
+      "label": "Log / Výstup"
+    }
+  ],
+  "phases": [
+    {
+      "id": "p0",
+      "label": "Klasifikácia",
+      "fromCol": 0,
+      "toCol": 3
+    },
+    {
+      "id": "p1",
+      "label": "Schválenie zóny",
+      "fromCol": 5,
+      "toCol": 5,
+      "variant": "security"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "zona",
+      "lane": "l2",
+      "col": 0,
+      "type": "frontend",
+      "label": "Určiť zónu",
+      "sublabel": "Z0-Z3 · vlastník dát",
+      "width": 150
+    },
+    {
+      "id": "mat",
+      "lane": "l3",
+      "col": 1,
+      "type": "security",
+      "label": "Schválenie podľa matice",
+      "sublabel": "Vlastník/CISO/Bezp.",
+      "tag": "STOP: freelancer+Z2",
+      "width": 175.5
+    },
+    {
+      "id": "iam",
+      "lane": "l2",
+      "col": 2,
+      "type": "backend",
+      "label": "IAM skupina + MFA",
+      "sublabel": "IT",
+      "width": 150
+    },
+    {
+      "id": "rec",
+      "lane": "l3",
+      "col": 3,
+      "type": "security",
+      "label": "Recertifikácia",
+      "sublabel": "pravidelná kontrola",
+      "tag": "DONE zóna",
+      "width": 150
+    },
+    {
+      "id": "off",
+      "lane": "l4",
+      "col": 5,
+      "type": "database",
+      "label": "Offboarding zóny",
+      "sublabel": "odobratie prístupu",
+      "tag": "DONE",
+      "width": 150
+    }
+  ],
+  "edges": [
+    {
+      "id": "e0",
+      "from": "zona",
+      "to": "mat"
+    },
+    {
+      "id": "e1",
+      "from": "mat",
+      "to": "iam",
+      "label": "schválené"
+    },
+    {
+      "id": "e2",
+      "from": "iam",
+      "to": "rec",
+      "label": "MFA + audit trail"
+    },
+    {
+      "id": "e3",
+      "from": "rec",
+      "to": "off"
+    }
+  ],
+  "mainPath": [
+    "zona",
+    "mat",
+    "iam",
+    "rec"
+  ],
+  "cards": [
+    {
+      "dot": "rose",
+      "title": "STOP",
+      "items": [
+        "Freelancer + Dôverné so sťahovaním = STOP",
+        "Utajované v bežnom cloude = STOP",
+        "AI s Dôvernými/Utajovanými = STOP"
+      ]
+    },
+    {
+      "dot": "cyan",
+      "title": "Log",
+      "items": [
+        "Access/DLP log",
+        "IAM grant",
+        "Audit trail zóny"
+      ]
+    },
+    {
+      "dot": "emerald",
+      "title": "KPI",
+      "items": [
+        "100% zón klasifikovaných",
+        "Least-privilege",
+        "Recertifikácia v termíne"
+      ]
+    }
+  ]
+}

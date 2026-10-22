@@ -1,0 +1,175 @@
+{
+  "schema_version": 2,
+  "diagram_type": "workflow",
+  "meta": {
+    "title": "FC-32 · Po-predajná podpora a servis",
+    "subtitle": "Servisný tiket → triáž → clearance (vzdialený) → diely → realizácia → sign-off → register.",
+    "animation": "trace",
+    "visual_preset": "signal-flow",
+    "quality_profile": "showcase",
+    "output": "fc32-servis.html"
+  },
+  "lanes": [
+    {
+      "id": "l1",
+      "label": "Iniciátor (1L)"
+    },
+    {
+      "id": "l2",
+      "label": "Vykonávateľ (1L)"
+    },
+    {
+      "id": "l3",
+      "label": "Dohľad / Schválenie (2L)"
+    },
+    {
+      "id": "l4",
+      "label": "Registre / Výstup"
+    }
+  ],
+  "phases": [
+    {
+      "id": "p0",
+      "label": "Vstup",
+      "fromCol": 0,
+      "toCol": 5
+    }
+  ],
+  "nodes": [
+    {
+      "id": "tick",
+      "lane": "l1",
+      "col": 0,
+      "type": "frontend",
+      "label": "Servisný tiket",
+      "sublabel": "zákazník · popis",
+      "width": 148
+    },
+    {
+      "id": "tria",
+      "lane": "l3",
+      "col": 1,
+      "type": "security",
+      "label": "Triáž + SLA",
+      "sublabel": "priorita",
+      "width": 148
+    },
+    {
+      "id": "cle",
+      "lane": "l3",
+      "col": 2,
+      "type": "security",
+      "label": "ECO clearance",
+      "sublabel": "vzdialený servis = vývoz",
+      "tag": "STOP: bez ECO",
+      "width": 172
+    },
+    {
+      "id": "diely",
+      "lane": "l2",
+      "col": 3,
+      "type": "backend",
+      "label": "Náhradné diely",
+      "sublabel": "FC-18 · FC-31",
+      "width": 148
+    },
+    {
+      "id": "real",
+      "lane": "l2",
+      "col": 4,
+      "type": "backend",
+      "label": "Realizácia servisu",
+      "sublabel": "on-site / remote",
+      "width": 148
+    },
+    {
+      "id": "ok",
+      "lane": "l4",
+      "col": 5,
+      "type": "database",
+      "label": "Overenie + sign-off",
+      "sublabel": "zákazník podpíše",
+      "width": 148
+    },
+    {
+      "id": "reg",
+      "lane": "l4",
+      "col": 0,
+      "type": "database",
+      "label": "Servisný register + záruka",
+      "sublabel": "uzavreté",
+      "tag": "DONE",
+      "width": 193.0
+    }
+  ],
+  "edges": [
+    {
+      "id": "e0",
+      "from": "tick",
+      "to": "tria"
+    },
+    {
+      "id": "e1",
+      "from": "tria",
+      "to": "cle"
+    },
+    {
+      "id": "e2",
+      "from": "cle",
+      "to": "diely",
+      "label": "OK"
+    },
+    {
+      "id": "e3",
+      "from": "diely",
+      "to": "real"
+    },
+    {
+      "id": "e4",
+      "from": "real",
+      "to": "ok"
+    },
+    {
+      "id": "e5",
+      "from": "ok",
+      "to": "reg"
+    }
+  ],
+  "mainPath": [
+    "tick",
+    "tria",
+    "cle",
+    "diely",
+    "real",
+    "ok"
+  ],
+  "cards": [
+    {
+      "dot": "rose",
+      "title": "STOP",
+      "items": [
+        "Vzdialený servis VOP bez ECO = STOP",
+        "Diel bez klasifikácie = STOP",
+        "Bez zákazníckeho sign-off = neuzavretý"
+      ]
+    },
+    {
+      "dot": "cyan",
+      "title": "Log",
+      "items": [
+        "Servisný register",
+        "ECO servisný log",
+        "Register dielov"
+      ]
+    },
+    {
+      "dot": "emerald",
+      "title": "KPI",
+      "items": [
+        "100% servisov v SLA",
+        "100% vzdialených s clearance",
+        "CSAT ≥ 90 %"
+      ]
+    }
+  ]
+}

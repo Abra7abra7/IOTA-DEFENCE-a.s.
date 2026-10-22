@@ -1,0 +1,12 @@
+flowchart LR
+    O["OBCHOD<br/>FC-09 · FC-16"] --> P2P["NÁKUP P2P<br/>FC-04"]
+    P2P --> F["FINANCIE<br/>FC-06 · FC-13"]
+    F --> A["AUDIT REGISTROV<br/>CCO kvartálne"]
+    O --> DD["DUE DILIGENCE<br/>FC-07 · FC-16"]
+    DD --> C["COMPLIANCE OK"]
+    C --> E["EXPORT CLEARANCE<br/>FC-09 ECO"]
+    E --> S["SCHVÁLENÝ OBCHOD"]
+    S --> L["LOGGING → REGISTRE"]
+    H["HR ONBOARDING<br/>FC-03"] --> P["PRÍSTUPY Z0-Z3<br/>FC-05"]
+    P --> Y["CYBER/MONITOR<br/>FC-08 · FC-14"]
+    Y --> L

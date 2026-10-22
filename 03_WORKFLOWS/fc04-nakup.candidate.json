@@ -1,0 +1,160 @@
+{
+  "schema_version": 2,
+  "diagram_type": "workflow",
+  "meta": {
+    "title": "FC-04 · Nákup P2P",
+    "subtitle": "Požiadavka → schválenie limitu → objednávka → príjemka → platba.",
+    "animation": "trace",
+    "visual_preset": "signal-flow",
+    "quality_profile": "showcase",
+    "output": "fc04-nakup.html"
+  },
+  "lanes": [
+    {
+      "id": "l1",
+      "label": "Iniciátor / Vlastník"
+    },
+    {
+      "id": "l2",
+      "label": "Vykonávateľ (1L)"
+    },
+    {
+      "id": "l3",
+      "label": "Dohľad / Schválenie (2L)"
+    },
+    {
+      "id": "l4",
+      "label": "Log / Výstup"
+    }
+  ],
+  "phases": [
+    {
+      "id": "p0",
+      "label": "Vstup",
+      "fromCol": 0,
+      "toCol": 5
+    }
+  ],
+  "nodes": [
+    {
+      "id": "poz",
+      "lane": "l1",
+      "col": 0,
+      "type": "frontend",
+      "label": "Požiadavka",
+      "sublabel": "typ + hodnota + deadline",
+      "width": 172
+    },
+    {
+      "id": "limit",
+      "lane": "l3",
+      "col": 1,
+      "type": "security",
+      "label": "Schválenie limitu",
+      "sublabel": "L1-L4 podľa sumy",
+      "tag": "rizikový → min L3",
+      "width": 150
+    },
+    {
+      "id": "po",
+      "lane": "l2",
+      "col": 2,
+      "type": "database",
+      "label": "Objednávka (PO)",
+      "sublabel": "vo schválenom limite",
+      "width": 150
+    },
+    {
+      "id": "prij",
+      "lane": "l2",
+      "col": 3,
+      "type": "backend",
+      "label": "Príjemka",
+      "sublabel": "špecificka + vstupná kontrola",
+      "width": 204
+    },
+    {
+      "id": "sklad",
+      "lane": "l4",
+      "col": 4,
+      "type": "database",
+      "label": "Sklad / majetok",
+      "sublabel": "evidencia",
+      "width": 150
+    },
+    {
+      "id": "plat",
+      "lane": "l3",
+      "col": 5,
+      "type": "database",
+      "label": "Platba 4-eyes",
+      "sublabel": "zadávateľ ≠ autorizátor",
+      "tag": "DONE",
+      "width": 165
+    }
+  ],
+  "edges": [
+    {
+      "id": "e0",
+      "from": "poz",
+      "to": "limit"
+    },
+    {
+      "id": "e1",
+      "from": "limit",
+      "to": "po",
+      "label": "schválené"
+    },
+    {
+      "id": "e2",
+      "from": "po",
+      "to": "prij"
+    },
+    {
+      "id": "e3",
+      "from": "prij",
+      "to": "sklad"
+    },
+    {
+      "id": "e4",
+      "from": "sklad",
+      "to": "plat"
+    }
+  ],
+  "mainPath": [
+    "poz",
+    "limit",
+    "po",
+    "prij",
+    "sklad"
+  ],
+  "cards": [
+    {
+      "dot": "rose",
+      "title": "STOP",
+      "items": [
+        "Delenie nákupu pod limit = STOP",
+        "After-the-fact schválenie = výnimka + report",
+        "rizikový prípad bez L3+ = STOP"
+      ]
+    },
+    {
+      "dot": "cyan",
+      "title": "Log",
+      "items": [
+        "Nákup register",
+        "ERP sign-off",
+        "Limity kontrolá"
+      ]
+    },
+    {
+      "dot": "emerald",
+      "title": "KPI",
+      "items": [
+        "100% PO schválených vopred",
+        "Platba vždy 4-eyes",
+        "0 delení pod limit"
+      ]
+    }
+  ]
+}

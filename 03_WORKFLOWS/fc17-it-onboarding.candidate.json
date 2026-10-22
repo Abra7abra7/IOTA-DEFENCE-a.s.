@@ -1,0 +1,186 @@
+{
+  "schema_version": 2,
+  "diagram_type": "workflow",
+  "meta": {
+    "title": "FC-17 · Vytvorenie konta používateľa (IT onboarding)",
+    "subtitle": "HR iniciuje · IT vytvorí identitu+MFA · CISO priradí role · ECO kontroluje cudzincov · Log do registrov.",
+    "animation": "trace",
+    "visual_preset": "signal-flow",
+    "quality_profile": "showcase",
+    "output": "fc17-it-onboarding.html"
+  },
+  "lanes": [
+    {
+      "id": "l1",
+      "label": "Iniciátor (1L)"
+    },
+    {
+      "id": "l2",
+      "label": "Vykonávateľ (1L)"
+    },
+    {
+      "id": "l3",
+      "label": "Dohľad / Schválenie (2L)"
+    },
+    {
+      "id": "l4",
+      "label": "Registre / Výstup"
+    }
+  ],
+  "phases": [
+    {
+      "id": "p0",
+      "label": "Vstup",
+      "fromCol": 0,
+      "toCol": 5
+    }
+  ],
+  "nodes": [
+    {
+      "id": "hr",
+      "lane": "l1",
+      "col": 0,
+      "type": "frontend",
+      "label": "Onboarding request",
+      "sublabel": "HR: funkcia, nástup",
+      "width": 141
+    },
+    {
+      "id": "request",
+      "lane": "l2",
+      "col": 1,
+      "type": "messagebus",
+      "label": "Request ticket",
+      "sublabel": "IT + CCO",
+      "width": 132
+    },
+    {
+      "id": "eco",
+      "lane": "l3",
+      "col": 2,
+      "type": "security",
+      "label": "ECO kontroluje",
+      "sublabel": "občianstvo · previerka · deemed export",
+      "tag": "STOP: cudzinec bez ECO",
+      "width": 263
+    },
+    {
+      "id": "ciso",
+      "lane": "l3",
+      "col": 3,
+      "type": "security",
+      "label": "CISO role/zóny",
+      "sublabel": "Z0-Z3 · MFA",
+      "width": 148
+    },
+    {
+      "id": "it",
+      "lane": "l2",
+      "col": 4,
+      "type": "backend",
+      "label": "IT vytvorí konto",
+      "sublabel": "identita + MFA seed",
+      "width": 139
+    },
+    {
+      "id": "docs",
+      "lane": "l4",
+      "col": 5,
+      "type": "database",
+      "label": "Oboznámenie",
+      "sublabel": "kódex · NDA · IPR · školenie",
+      "width": 198
+    },
+    {
+      "id": "done",
+      "lane": "l4",
+      "col": 3,
+      "type": "database",
+      "label": "Konto + log",
+      "sublabel": "access + register školení",
+      "tag": "DONE",
+      "width": 178
+    }
+  ],
+  "edges": [
+    {
+      "id": "e0",
+      "from": "hr",
+      "to": "request"
+    },
+    {
+      "id": "e1",
+      "from": "request",
+      "to": "eco"
+    },
+    {
+      "id": "e2",
+      "from": "eco",
+      "to": "ciso",
+      "label": "OK",
+      "variant": "security"
+    },
+    {
+      "id": "e3",
+      "from": "ciso",
+      "to": "it",
+      "label": "role OK",
+      "variant": "emphasis"
+    },
+    {
+      "id": "e4",
+      "from": "it",
+      "to": "docs"
+    },
+    {
+      "id": "e5",
+      "from": "docs",
+      "to": "done"
+    },
+    {
+      "id": "e6",
+      "from": "eco",
+      "to": "done",
+      "label": "STOP",
+      "variant": "security",
+      "role": "error"
+    }
+  ],
+  "mainPath": [
+    "hr",
+    "request",
+    "eco",
+    "ciso",
+    "it"
+  ],
+  "cards": [
+    {
+      "dot": "rose",
+      "title": "STOP",
+      "items": [
+        "Cudzinec bez ECO súhlasu = konto neaktívne",
+        "Bez NDA/IPR = žiadne Z2/Z3",
+        "Bez role = žiadny prístup"
+      ]
+    },
+    {
+      "dot": "cyan",
+      "title": "Log",
+      "items": [
+        "Access log (imutable)",
+        "Register školenia",
+        "Register pomôcok (FC-19)"
+      ]
+    },
+    {
+      "dot": "emerald",
+      "title": "KPI",
+      "items": [
+        "100% kont do 24h",
+        "100% MFA",
+        "0 kont bez role"
+      ]
+    }
+  ],
+  "groups": []
+}

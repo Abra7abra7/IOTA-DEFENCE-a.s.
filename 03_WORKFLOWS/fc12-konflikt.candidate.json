@@ -1,0 +1,151 @@
+{
+  "schema_version": 2,
+  "diagram_type": "workflow",
+  "meta": {
+    "title": "FC-12 · Konflikt záujmov",
+    "subtitle": "Identifikácia → písomné hlásenie vopred → posúdenie CCO → opatrenie → register.",
+    "animation": "trace",
+    "visual_preset": "signal-flow",
+    "quality_profile": "showcase",
+    "output": "fc12-konflikt.html"
+  },
+  "lanes": [
+    {
+      "id": "l1",
+      "label": "Iniciátor / Vlastník"
+    },
+    {
+      "id": "l2",
+      "label": "Vykonávateľ (1L)"
+    },
+    {
+      "id": "l3",
+      "label": "Dohľad / Schválenie (2L)"
+    },
+    {
+      "id": "l4",
+      "label": "Log / Výstup"
+    }
+  ],
+  "phases": [
+    {
+      "id": "p0",
+      "label": "Identifikácia",
+      "fromCol": 0,
+      "toCol": 3
+    },
+    {
+      "id": "p1",
+      "label": "Hlásenie",
+      "fromCol": 5,
+      "toCol": 5,
+      "variant": "security"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "id",
+      "lane": "l1",
+      "col": 0,
+      "type": "frontend",
+      "label": "Identifikácia konfliktu",
+      "sublabel": "skutočný / potenciálny / zdanlivý",
+      "width": 230
+    },
+    {
+      "id": "hl",
+      "lane": "l2",
+      "col": 1,
+      "type": "security",
+      "label": "Písomné hlásenie vopred",
+      "sublabel": "zdržať sa rozhodovania",
+      "width": 175.5
+    },
+    {
+      "id": "roz",
+      "lane": "l3",
+      "col": 2,
+      "type": "security",
+      "label": "Posúdenie CCO ≤ [N] dní",
+      "sublabel": "CCO alebo nadriadený orgán",
+      "tag": "CCO → gestor · Predst. → predseda DR",
+      "width": 254
+    },
+    {
+      "id": "op",
+      "lane": "l4",
+      "col": 3,
+      "type": "database",
+      "label": "Opatrenie v procese",
+      "sublabel": "vylúčenie · presun · 4-eyes · ukončiť",
+      "width": 256
+    },
+    {
+      "id": "reg",
+      "lane": "l4",
+      "col": 5,
+      "type": "database",
+      "label": "Register konfliktov",
+      "sublabel": "+ ročné vyhlásenie",
+      "tag": "DONE",
+      "width": 150
+    }
+  ],
+  "edges": [
+    {
+      "id": "e0",
+      "from": "id",
+      "to": "hl"
+    },
+    {
+      "id": "e1",
+      "from": "hl",
+      "to": "roz"
+    },
+    {
+      "id": "e2",
+      "from": "roz",
+      "to": "op",
+      "label": "rozhodnutie"
+    },
+    {
+      "id": "e3",
+      "from": "op",
+      "to": "reg"
+    }
+  ],
+  "mainPath": [
+    "id",
+    "hl",
+    "roz",
+    "op"
+  ],
+  "cards": [
+    {
+      "dot": "rose",
+      "title": "STOP",
+      "items": [
+        "Zatajený konflikt = porušenie (aj bez škody)",
+        "TX so spriaznenou osobou = CCO + Predstavenstvo (ObZ)",
+        "Zdržať sa rozhodovania pri konflikte"
+      ]
+    },
+    {
+      "dot": "cyan",
+      "title": "Log",
+      "items": [
+        "Register konfliktov",
+        "Ročné vyhlásenia"
+      ]
+    },
+    {
+      "dot": "emerald",
+      "title": "KPI",
+      "items": [
+        "100% hlásení vopred",
+        "100% ročných vyhlásení",
+        "0 zatajených konfliktov"
+      ]
+    }
+  ]
+}

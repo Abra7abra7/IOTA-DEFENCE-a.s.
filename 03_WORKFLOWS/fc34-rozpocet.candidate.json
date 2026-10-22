@@ -1,0 +1,174 @@
+{
+  "schema_version": 2,
+  "diagram_type": "workflow",
+  "meta": {
+    "title": "FC-34 · Rozpočet a cashflow",
+    "subtitle": "Návrh útvarov → konsolidácia + cashflow → review · priorita → schválenie → controlling → report.",
+    "animation": "trace",
+    "visual_preset": "signal-flow",
+    "quality_profile": "showcase",
+    "output": "fc34-rozpocet.html"
+  },
+  "lanes": [
+    {
+      "id": "l1",
+      "label": "Iniciátor (1L)"
+    },
+    {
+      "id": "l2",
+      "label": "Vykonávateľ (1L)"
+    },
+    {
+      "id": "l3",
+      "label": "Dohľad / Schválenie (2L)"
+    },
+    {
+      "id": "l4",
+      "label": "Registre / Výstup"
+    }
+  ],
+  "phases": [
+    {
+      "id": "p0",
+      "label": "Návrh",
+      "fromCol": 0,
+      "toCol": 5
+    }
+  ],
+  "nodes": [
+    {
+      "id": "nav",
+      "lane": "l2",
+      "col": 0,
+      "type": "frontend",
+      "label": "Návrh útvarov",
+      "sublabel": "rozpočet",
+      "width": 148
+    },
+    {
+      "id": "kon",
+      "lane": "l2",
+      "col": 1,
+      "type": "backend",
+      "label": "Konsolidácia + cashflow",
+      "sublabel": "13+ týždňov",
+      "width": 173.5
+    },
+    {
+      "id": "rev",
+      "lane": "l3",
+      "col": 2,
+      "type": "security",
+      "label": "Review · škrtanie",
+      "sublabel": "CFO finalizuje",
+      "width": 148
+    },
+    {
+      "id": "sch",
+      "lane": "l3",
+      "col": 3,
+      "type": "security",
+      "label": "Schválenie",
+      "sublabel": "predstavenstvo",
+      "width": 148
+    },
+    {
+      "id": "mes",
+      "lane": "l2",
+      "col": 4,
+      "type": "backend",
+      "label": "Mesačný controlling",
+      "sublabel": "plnenie",
+      "width": 148
+    },
+    {
+      "id": "cf",
+      "lane": "l3",
+      "col": 5,
+      "type": "backend",
+      "label": "Cashflow + riziko",
+      "sublabel": "týždenne",
+      "width": 148
+    },
+    {
+      "id": "rep",
+      "lane": "l4",
+      "col": 5,
+      "type": "database",
+      "label": "Kvartálny report DR",
+      "sublabel": "uzavretý",
+      "tag": "DONE",
+      "width": 148
+    }
+  ],
+  "edges": [
+    {
+      "id": "e0",
+      "from": "nav",
+      "to": "kon"
+    },
+    {
+      "id": "e1",
+      "from": "kon",
+      "to": "rev"
+    },
+    {
+      "id": "e2",
+      "from": "rev",
+      "to": "sch"
+    },
+    {
+      "id": "e3",
+      "from": "sch",
+      "to": "mes",
+      "label": "schválené"
+    },
+    {
+      "id": "e4",
+      "from": "mes",
+      "to": "cf"
+    },
+    {
+      "id": "e5",
+      "from": "cf",
+      "to": "rep"
+    }
+  ],
+  "mainPath": [
+    "nav",
+    "kon",
+    "rev",
+    "sch",
+    "mes",
+    "cf"
+  ],
+  "cards": [
+    {
+      "dot": "rose",
+      "title": "STOP",
+      "items": [
+        "Čerpanie nad rozpočet = STOP",
+        "Cashflow riziko → eskalácia CEO",
+        "Investícia nad limit = STOP"
+      ]
+    },
+    {
+      "dot": "cyan",
+      "title": "Log",
+      "items": [
+        "Rozpočtový register",
+        "Controlling",
+        "Cashflow register"
+      ]
+    },
+    {
+      "dot": "emerald",
+      "title": "KPI",
+      "items": [
+        "100% čerpania podľa rozpočtu",
+        "Cashflow 13+ týždňov",
+        "0 prekročení limitov"
+      ]
+    }
+  ]
+}

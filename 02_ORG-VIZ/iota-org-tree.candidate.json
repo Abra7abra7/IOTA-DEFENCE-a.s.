@@ -1,0 +1,191 @@
+{
+  "schema_version": 1,
+  "diagram_type": "tree",
+  "meta": {
+    "title": "IOTA Defence a.s. — Organizačná štruktúra (v3.0)",
+    "subtitle": "Tri línie ochrany: prevádzka (1L), compliance/bezpečnosť (2L), interný audit (3L). Reporting: 2. línia → Predstavenstvo, priamy prístup CCO/Bezp. → predseda DR.",
+    "output": "iota-org-tree.html",
+    "quality_profile": "showcase"
+  },
+  "nodes": [
+    {
+      "id": "vz",
+      "label": "VALNÉ ZHROMAŽDENIE",
+      "sublabel": "akcionári SR + EÚ"
+    },
+    {
+      "id": "dr",
+      "label": "DOZORNÁ RADA",
+      "parent": "vz",
+      "sublabel": "min. 3 členovia · predseda = Chairman"
+    },
+    {
+      "id": "ia",
+      "label": "Interný audit (3. línia)",
+      "parent": "dr",
+      "sublabel": "externý · reportuje DR"
+    },
+    {
+      "id": "ps",
+      "label": "PREDSTAVENSTVO",
+      "parent": "vz",
+      "sublabel": "predseda = CEO · gestor compliance + bezpečnosti"
+    },
+    {
+      "id": "comp",
+      "label": "2L Compliance",
+      "parent": "ps",
+      "sublabel": "CCO + analytik DD (+1 do 12 mes.)"
+    },
+    {
+      "id": "export",
+      "label": "2L Exportná kontrola & sankcie",
+      "parent": "ps",
+      "sublabel": "ECO (zodp. zástupca §8 z.392/2011) + 2 špecialisti"
+    },
+    {
+      "id": "bezp",
+      "label": "2L Bezpečnosť",
+      "parent": "ps",
+      "sublabel": "Bezpečnostný riaditeľ + osobitné pracovisko + CISO (ext.)"
+    },
+    {
+      "id": "ceo",
+      "label": "CEO",
+      "parent": "ps",
+      "sublabel": "predseda Predstavenstva"
+    },
+    {
+      "id": "kval",
+      "label": "Kvalita",
+      "parent": "ceo",
+      "sublabel": "manažér kvality · AQAP 2110"
+    },
+    {
+      "id": "hse",
+      "label": "Bezpečnosť výroby & výbušnín (HSE)",
+      "parent": "ceo",
+      "sublabel": "zodp. zástupca z.58/2014 · pyrotechnik"
+    },
+    {
+      "id": "cto",
+      "label": "Vývoj a inovácie",
+      "parent": "ceo",
+      "sublabel": "CTO · hardvér + softvér"
+    },
+    {
+      "id": "open",
+      "label": "Otvorený tím",
+      "parent": "cto",
+      "sublabel": "aj ľudia mimo EÚ · nekontrolované časti"
+    },
+    {
+      "id": "ctrl",
+      "label": "Kontrolovaný tím",
+      "parent": "cto",
+      "sublabel": "VM/kontrolované/utajované · len schválení ECO"
+    },
+    {
+      "id": "vyroba",
+      "label": "Výroba",
+      "parent": "ceo",
+      "sublabel": "vedúci výroby"
+    },
+    {
+      "id": "vyroba_uav",
+      "label": "Výroba UAV a systémov",
+      "parent": "vyroba"
+    },
+    {
+      "id": "vyroba_mun",
+      "label": "Výroba munície",
+      "parent": "vyroba",
+      "sublabel": "len s povolením HBÚ"
+    },
+    {
+      "id": "strat",
+      "label": "Stratégia a obchod",
+      "parent": "ceo",
+      "sublabel": "Riaditeľ stratégie a obchodu (ex-CSO)"
+    },
+    {
+      "id": "obchod",
+      "label": "Obchod a obranné zákazky",
+      "parent": "strat"
+    },
+    {
+      "id": "prog",
+      "label": "Programy a granty",
+      "parent": "strat",
+      "sublabel": "PMO · EDF · EDIP"
+    },
+    {
+      "id": "cfo",
+      "label": "CFO — Financie a administratíva",
+      "parent": "ceo"
+    },
+    {
+      "id": "fin",
+      "label": "Financie a controlling",
+      "parent": "cfo",
+      "sublabel": "platby 4-eyes"
+    },
+    {
+      "id": "hr",
+      "label": "HR",
+      "parent": "cfo",
+      "sublabel": "nástupy · previerky · cudzinci"
+    },
+    {
+      "id": "nakup",
+      "label": "Nákup a dodávateľský reťazec",
+      "parent": "cfo",
+      "sublabel": "pôvod komponentov"
+    },
+    {
+      "id": "it",
+      "label": "IT prevádzka",
+      "parent": "cfo",
+      "sublabel": "1L · dohľad CISO (oddelené zóny)"
+    }
+  ],
+  "cards": [
+    {
+      "dot": "slate",
+      "title": "Orgány a.s.",
+      "items": [
+        "VZ: akcionári (SR, EÚ) volia/odvolávajú orgány",
+        "DR: kontrolný orgán, štvrťročný report 2. línie",
+        "Predstavenstvo: štatutár; gestor compliance + bezpečnosti"
+      ]
+    },
+    {
+      "dot": "amber",
+      "title": "Pravidlá nezávislosti",
+      "items": [
+        "Kumulácia 1L+2L u jednej osoby = STOP (výnimka len Predstavenstvo)",
+        "Gestor (CCO/ECO/CISO/Bezp.) nesmie zodpovedať za predaj",
+        "CISO oddelený od IT prevádzky",
+        "Priamy prístup CCO/Bezp. → predseda DR"
+      ]
+    },
+    {
+      "dot": "emerald",
+      "title": "Reporting",
+      "items": [
+        "2. línia → Predstavenstvo (štvrťročne U-03)",
+        "Interný audit → DR",
+        "CEO → VZ; predstavenstvo informuje DR"
+      ]
+    },
+    {
+      "dot": "cyan",
+      "title": "Počty (návrh)",
+      "items": [
+        "30 + 1 (31. miesto na upresnenie)",
+        "Nábor: CCO, ECO, Bezp. riaditeľ, HSE zodp. zástupca, pyrotechnik, softvéroví vývojári, neskôr CISO",
+        "Externe: advokát, DPO, interný audit, PO technik"
+      ]
+    }
+  ]
+}

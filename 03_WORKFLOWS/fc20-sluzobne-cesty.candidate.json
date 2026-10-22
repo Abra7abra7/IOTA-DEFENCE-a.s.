@@ -1,0 +1,185 @@
+{
+  "schema_version": 2,
+  "diagram_type": "workflow",
+  "meta": {
+    "title": "FC-20 · Služobné cesty (export-control)",
+    "subtitle": "Žiadosť → ECO review (krajina/technológie) → schválenie → rezervácia → vyúčtovanie → evidencia.",
+    "animation": "trace",
+    "visual_preset": "signal-flow",
+    "quality_profile": "showcase",
+    "output": "fc20-sluzobne-cesty.html"
+  },
+  "lanes": [
+    {
+      "id": "l1",
+      "label": "Iniciátor (1L)"
+    },
+    {
+      "id": "l2",
+      "label": "Vykonávateľ (1L)"
+    },
+    {
+      "id": "l3",
+      "label": "Dohľad / Schválenie (2L)"
+    },
+    {
+      "id": "l4",
+      "label": "Registre / Výstup"
+    }
+  ],
+  "phases": [
+    {
+      "id": "p0",
+      "label": "Žiadosť",
+      "fromCol": 0,
+      "toCol": 5
+    }
+  ],
+  "nodes": [
+    {
+      "id": "z",
+      "lane": "l1",
+      "col": 0,
+      "type": "frontend",
+      "label": "Žiadosť o cestu",
+      "sublabel": "krajina · účel · rozpočet",
+      "width": 178
+    },
+    {
+      "id": "eco",
+      "lane": "l3",
+      "col": 1,
+      "type": "security",
+      "label": "ECO review",
+      "sublabel": "embargá · technológie · víza",
+      "tag": "STOP: riziko",
+      "width": 198
+    },
+    {
+      "id": "man",
+      "lane": "l3",
+      "col": 2,
+      "type": "security",
+      "label": "Schválenie",
+      "sublabel": "manažér + CFO (rozpočet)",
+      "width": 172
+    },
+    {
+      "id": "rez",
+      "lane": "l2",
+      "col": 3,
+      "type": "database",
+      "label": "Rezervácia",
+      "sublabel": "v rámci pravidiel · preddavok",
+      "width": 204
+    },
+    {
+      "id": "cest",
+      "lane": "l2",
+      "col": 4,
+      "type": "messagebus",
+      "label": "Cesta",
+      "sublabel": "laptop zámok · žiadne zdieľanie",
+      "width": 217
+    },
+    {
+      "id": "vyu",
+      "lane": "l4",
+      "col": 5,
+      "type": "database",
+      "label": "Vyúčtovanie",
+      "sublabel": "dochádzky + doklady",
+      "width": 139
+    },
+    {
+      "id": "evid",
+      "lane": "l4",
+      "col": 2,
+      "type": "database",
+      "label": "Evidencia + report",
+      "sublabel": "cesty · insighty · ECO log",
+      "tag": "DONE",
+      "width": 185
+    }
+  ],
+  "edges": [
+    {
+      "id": "e0",
+      "from": "z",
+      "to": "eco"
+    },
+    {
+      "id": "e1",
+      "from": "eco",
+      "to": "man",
+      "label": "OK",
+      "variant": "security"
+    },
+    {
+      "id": "e2",
+      "from": "man",
+      "to": "rez",
+      "variant": "emphasis"
+    },
+    {
+      "id": "e3",
+      "from": "rez",
+      "to": "cest"
+    },
+    {
+      "id": "e4",
+      "from": "cest",
+      "to": "vyu"
+    },
+    {
+      "id": "e5",
+      "from": "vyu",
+      "to": "evid"
+    },
+    {
+      "id": "e6",
+      "from": "eco",
+      "to": "evid",
+      "label": "STOP",
+      "variant": "security",
+      "role": "error"
+    }
+  ],
+  "mainPath": [
+    "z",
+    "eco",
+    "man",
+    "rez",
+    "cest"
+  ],
+  "cards": [
+    {
+      "dot": "rose",
+      "title": "STOP",
+      "items": [
+        "Embargo krajina bez výnimky = NOT",
+        "Z2/Z3 tech bez ECO = nepovolené",
+        "Vyúčtovanie po lehote = stop preddavok"
+      ]
+    },
+    {
+      "dot": "cyan",
+      "title": "Log",
+      "items": [
+        "Evidencia ciest",
+        "Vyúčtovania",
+        "ECO log (kontrolované tech)"
+      ]
+    },
+    {
+      "dot": "emerald",
+      "title": "KPI",
+      "items": [
+        "100% ciest mimo EÚ cez ECO",
+        "Vyúčtovanie < 14 dní",
+        "0 ciest do zakázaných krajín"
+      ]
+    }
+  ],
+  "groups": []
+}

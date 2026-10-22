@@ -1,0 +1,162 @@
+{
+  "schema_version": 2,
+  "diagram_type": "workflow",
+  "meta": {
+    "title": "FC-25 · Odmeňovanie a výplaty",
+    "subtitle": "HR a mzdy počítajú → CFO schvaľuje → CCO kontroluje gestorov → výplata 4-eyes → registre.",
+    "animation": "trace",
+    "visual_preset": "signal-flow",
+    "quality_profile": "showcase",
+    "output": "fc25-odmeny-vyplaty.html"
+  },
+  "lanes": [
+    {
+      "id": "l1",
+      "label": "Iniciátor (1L)"
+    },
+    {
+      "id": "l2",
+      "label": "Vykonávateľ (1L)"
+    },
+    {
+      "id": "l3",
+      "label": "Dohľad / Schválenie (2L)"
+    },
+    {
+      "id": "l4",
+      "label": "Registre / Výstup"
+    }
+  ],
+  "phases": [
+    {
+      "id": "p0",
+      "label": "Vstup",
+      "fromCol": 0,
+      "toCol": 5
+    }
+  ],
+  "nodes": [
+    {
+      "id": "podkl",
+      "lane": "l2",
+      "col": 0,
+      "type": "messagebus",
+      "label": "Podklady miezd",
+      "sublabel": "dochádzka · odmeny",
+      "width": 148
+    },
+    {
+      "id": "mzdy",
+      "lane": "l2",
+      "col": 1,
+      "type": "backend",
+      "label": "Výpočet mzdy",
+      "sublabel": "odvody · daň",
+      "width": 148
+    },
+    {
+      "id": "sign",
+      "lane": "l3",
+      "col": 2,
+      "type": "security",
+      "label": "Schválenie CFO",
+      "sublabel": "sign-off",
+      "width": 148
+    },
+    {
+      "id": "cco",
+      "lane": "l3",
+      "col": 3,
+      "type": "security",
+      "label": "CCO kontrola",
+      "sublabel": "gestori: odmena ≠ obrat",
+      "tag": "STOP: odmena na obrat",
+      "width": 165
+    },
+    {
+      "id": "vyp",
+      "lane": "l2",
+      "col": 4,
+      "type": "database",
+      "label": "Výplata",
+      "sublabel": "4-eyes · banka",
+      "width": 148
+    },
+    {
+      "id": "reg",
+      "lane": "l4",
+      "col": 5,
+      "type": "database",
+      "label": "Evidencia",
+      "sublabel": "mzdový register",
+      "tag": "DONE",
+      "width": 148
+    }
+  ],
+  "edges": [
+    {
+      "id": "e0",
+      "from": "podkl",
+      "to": "mzdy"
+    },
+    {
+      "id": "e1",
+      "from": "mzdy",
+      "to": "sign"
+    },
+    {
+      "id": "e2",
+      "from": "sign",
+      "to": "cco",
+      "label": "OK"
+    },
+    {
+      "id": "e3",
+      "from": "cco",
+      "to": "vyp",
+      "label": "OK",
+      "variant": "emphasis"
+    },
+    {
+      "id": "e4",
+      "from": "vyp",
+      "to": "reg"
+    }
+  ],
+  "mainPath": [
+    "podkl",
+    "mzdy",
+    "sign",
+    "cco",
+    "vyp"
+  ],
+  "cards": [
+    {
+      "dot": "rose",
+      "title": "STOP",
+      "items": [
+        "Mzda nad limit = STOP",
+        "Odmena gestora na obrate = STOP",
+        "Hotovosť = nepovolené"
+      ]
+    },
+    {
+      "dot": "cyan",
+      "title": "Log",
+      "items": [
+        "Mzdový register",
+        "Sign-off log",
+        "Register potvrdení"
+      ]
+    },
+    {
+      "dot": "emerald",
+      "title": "KPI",
+      "items": [
+        "100% výplat do mesiaca",
+        "0 odchýlok CCO",
+        "0 pripomienok auditu"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,186 @@
+{
+  "schema_version": 2,
+  "diagram_type": "workflow",
+  "meta": {
+    "title": "FC-21 · Komunikácia s klientmi (CRM)",
+    "subtitle": "Registrácia kontaktu → DD/screening → ponuka (klasifikácia) → zmluva (legal) → dodanie → faktúra → after-sales.",
+    "animation": "trace",
+    "visual_preset": "signal-flow",
+    "quality_profile": "showcase",
+    "output": "fc21-crm-klienti.html"
+  },
+  "lanes": [
+    {
+      "id": "l1",
+      "label": "Iniciátor (1L)"
+    },
+    {
+      "id": "l2",
+      "label": "Vykonávateľ (1L)"
+    },
+    {
+      "id": "l3",
+      "label": "Dohľad / Schválenie (2L)"
+    },
+    {
+      "id": "l4",
+      "label": "Registre / Výstup"
+    }
+  ],
+  "phases": [
+    {
+      "id": "p0",
+      "label": "Vstup",
+      "fromCol": 0,
+      "toCol": 5
+    }
+  ],
+  "nodes": [
+    {
+      "id": "crm",
+      "lane": "l1",
+      "col": 0,
+      "type": "frontend",
+      "label": "Registrácia v CRM",
+      "sublabel": "kontakt · segment",
+      "width": 134
+    },
+    {
+      "id": "dd",
+      "lane": "l3",
+      "col": 1,
+      "type": "security",
+      "label": "DD + screening",
+      "sublabel": "FC-07 · FC-09",
+      "tag": "STOP: rizikový",
+      "width": 148
+    },
+    {
+      "id": "pon",
+      "lane": "l2",
+      "col": 2,
+      "type": "database",
+      "label": "Ponuka",
+      "sublabel": "klasifikácia tovaru · cena",
+      "width": 185
+    },
+    {
+      "id": "zml",
+      "lane": "l4",
+      "col": 3,
+      "type": "database",
+      "label": "Zmluva (legal)",
+      "sublabel": "doložky · no-Russia",
+      "width": 139
+    },
+    {
+      "id": "exp",
+      "lane": "l3",
+      "col": 4,
+      "type": "security",
+      "label": "Export clearance",
+      "sublabel": "ECU · licencia",
+      "width": 132
+    },
+    {
+      "id": "del",
+      "lane": "l2",
+      "col": 5,
+      "type": "database",
+      "label": "Dodanie",
+      "sublabel": "logistika · delivery",
+      "width": 146
+    },
+    {
+      "id": "fac",
+      "lane": "l1",
+      "col": 5,
+      "type": "database",
+      "label": "Faktúra + after-sales",
+      "sublabel": "CRM update · KPI",
+      "tag": "DONE",
+      "width": 160
+    }
+  ],
+  "edges": [
+    {
+      "id": "e0",
+      "from": "crm",
+      "to": "dd"
+    },
+    {
+      "id": "e1",
+      "from": "dd",
+      "to": "pon",
+      "label": "OK",
+      "variant": "security"
+    },
+    {
+      "id": "e2",
+      "from": "pon",
+      "to": "zml"
+    },
+    {
+      "id": "e3",
+      "from": "zml",
+      "to": "exp"
+    },
+    {
+      "id": "e4",
+      "from": "exp",
+      "to": "del",
+      "label": "SCHVÁLENÉ",
+      "variant": "emphasis"
+    },
+    {
+      "id": "e5",
+      "from": "del",
+      "to": "fac"
+    },
+    {
+      "id": "e6",
+      "from": "exp",
+      "to": "fac",
+      "label": "STOP",
+      "variant": "security",
+      "role": "error"
+    }
+  ],
+  "mainPath": [
+    "crm",
+    "dd",
+    "pon",
+    "zml",
+    "exp"
+  ],
+  "cards": [
+    {
+      "dot": "rose",
+      "title": "STOP",
+      "items": [
+        "Klient bez DD = neponúkať",
+        "Ponuka bez klasifikácie = STOP",
+        "Zmluva bez legal = STOP"
+      ]
+    },
+    {
+      "dot": "cyan",
+      "title": "Log",
+      "items": [
+        "CRM",
+        "Register tretích strán",
+        "Register licencií + faktúry"
+      ]
+    },
+    {
+      "dot": "emerald",
+      "title": "KPI",
+      "items": [
+        "100% klientov v CRM",
+        "100% ponúk klasifikovaných",
+        "Pipeline review mesačne"
+      ]
+    }
+  ],
+  "groups": []
+}

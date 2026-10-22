@@ -1,0 +1,13 @@
+flowchart LR
+    L1["1. LÍNIA<br/>vlastník rizík · RACI"]
+    L2["2. LÍNIA<br/>CCO · ECO · CISO · Bezp. · Legal · DPO<br/>STOP-right"]
+    L3["3. LÍNIA<br/>Interný audit"]
+    PS["PREDSTAVENSTVO<br/>štatutár"]
+    DR["DOZORNÁ RADA<br/>kontrolný"]
+
+    L1 -->|"riziko/incident/eskalácia"| L2
+    L2 -->|"politiky · monitoring · STOP"| L1
+    L2 -->|"štvrťročný report U-03"| PS
+    L3 -->|"správa IA"| DR
+    PS -->|"uznesenia"| L2
+    DR -->|"dohľad"| PS

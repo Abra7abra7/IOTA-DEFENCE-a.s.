@@ -1,0 +1,11 @@
+agent_id,role,scope_systems_docs,max_approval_level,owner_human,status,notes
+iota-cos-orchestrator,Chief of Staff orchestrator,Drive 01_Compliance; Gmail drafts; Calendar; agent dispatch,L1,Márian Stančík,NÁVRH,Default orchestrátor; gated send/payment always human ÁNO
+iota-inbox-01,Inbox triage,Gmail read/label/draft; no send without ÁNO,L1,Márian Stančík,NÁVRH,Draft only
+iota-legal-01,Legal QC,Compliance Docs read; Legal review drafts; no policy publish,L1,[DOPLNIŤ Legal owner],NÁVRH,Dual control on AML/export opinions
+iota-payments-01,Payments assistant,Finance drafts; P2P checklist; never bank execute alone,L1,[DOPLNIŤ Financie],NÁVRH,Escalate ≥L2; 4-eyes on payment
+iota-compliance-01,Compliance assistant,Policies 15-25; registers 27-28; SOP 29 drafts,L1,CCO [DOPLNIŤ],NÁVRH,No sanctions register write without ECO/CCO ÁNO
+iota-security-01,InfoSec / NIS2 assistant,InfoSec policy; logging; incident drafts,L1,CISO [DOPLNIŤ],NÁVRH,NIS2 reporting drafts only
+iota-aml-01,AML/KYC assistant,AML screening drafts; KYC checklist,L1,CCO [DOPLNIŤ],NÁVRH,AML hit → dual control; never silent clear
+iota-export-01,Export/sanctions assistant,SOP 29; screening drafts,L1,ECO [DOPLNIŤ],NÁVRH,DENY → ECO+CCO
+iota-hr-onboard-01,Onboarding assistant,Onboarding process docs; access request drafts,L1,HR [DOPLNIŤ],NÁVRH,No privilege grant without human
+EXAMPLE-DO-NOT-USE,Príklad,—,L1,—,PRÍKLAD,Zmazať pred ostrým použitím

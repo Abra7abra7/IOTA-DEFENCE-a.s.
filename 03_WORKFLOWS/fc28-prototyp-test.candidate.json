@@ -1,0 +1,161 @@
+{
+  "schema_version": 2,
+  "diagram_type": "workflow",
+  "meta": {
+    "title": "FC-28 · Prototyp a testovanie",
+    "subtitle": "Test plan → prototyp → testy → HSE kontrola → analýza → iterácia/release → dokumentácia.",
+    "animation": "trace",
+    "visual_preset": "signal-flow",
+    "quality_profile": "showcase",
+    "output": "fc28-prototyp-test.html"
+  },
+  "lanes": [
+    {
+      "id": "l1",
+      "label": "Iniciátor (1L)"
+    },
+    {
+      "id": "l2",
+      "label": "Vykonávateľ (1L)"
+    },
+    {
+      "id": "l3",
+      "label": "Dohľad / Schválenie (2L)"
+    },
+    {
+      "id": "l4",
+      "label": "Registre / Výstup"
+    }
+  ],
+  "phases": [
+    {
+      "id": "p0",
+      "label": "Plán",
+      "fromCol": 0,
+      "toCol": 5
+    }
+  ],
+  "nodes": [
+    {
+      "id": "plan",
+      "lane": "l2",
+      "col": 0,
+      "type": "frontend",
+      "label": "Test plan",
+      "sublabel": "cieľ · rozsah · riziká",
+      "width": 159
+    },
+    {
+      "id": "proto",
+      "lane": "l2",
+      "col": 1,
+      "type": "backend",
+      "label": "Postavenie prototypu",
+      "sublabel": "FC-23 fáza 5",
+      "width": 154.0
+    },
+    {
+      "id": "test",
+      "lane": "l2",
+      "col": 2,
+      "type": "backend",
+      "label": "Testy",
+      "sublabel": "funkčné · EMC · enviro · lety",
+      "width": 204
+    },
+    {
+      "id": "hse",
+      "lane": "l3",
+      "col": 3,
+      "type": "security",
+      "label": "HSE kontrola",
+      "sublabel": "výbušniny · lety",
+      "tag": "STOP: bez pyrotechnika",
+      "width": 163
+    },
+    {
+      "id": "ana",
+      "lane": "l3",
+      "col": 4,
+      "type": "backend",
+      "label": "Analýza výsledkov",
+      "sublabel": "pass/fail · CTO+Kvalita",
+      "width": 165
+    },
+    {
+      "id": "rel",
+      "lane": "l4",
+      "col": 5,
+      "type": "database",
+      "label": "Release/kvalifikácia",
+      "sublabel": "dokumentácia testov",
+      "tag": "DONE",
+      "width": 154.0
+    }
+  ],
+  "edges": [
+    {
+      "id": "e0",
+      "from": "plan",
+      "to": "proto"
+    },
+    {
+      "id": "e1",
+      "from": "proto",
+      "to": "test"
+    },
+    {
+      "id": "e2",
+      "from": "test",
+      "to": "hse"
+    },
+    {
+      "id": "e3",
+      "from": "hse",
+      "to": "ana",
+      "label": "OK"
+    },
+    {
+      "id": "e4",
+      "from": "ana",
+      "to": "rel",
+      "label": "pass"
+    }
+  ],
+  "mainPath": [
+    "plan",
+    "proto",
+    "test",
+    "hse",
+    "ana"
+  ],
+  "cards": [
+    {
+      "dot": "rose",
+      "title": "STOP",
+      "items": [
+        "Test výbušnín bez pyrotechnika = STOP",
+        "Let bez prevádzkového povolenia = STOP",
+        "Report bez podpisu = neplatný"
+      ]
+    },
+    {
+      "dot": "cyan",
+      "title": "Log",
+      "items": [
+        "Test register",
+        "Prototyp register",
+        "Letový register (UAS)"
+      ]
+    },
+    {
+      "dot": "emerald",
+      "title": "KPI",
+      "items": [
+        "100% testov podľa plánu",
+        "0 testov bez povolenia",
+        "Kvalifikácia < 30 dní"
+      ]
+    }
+  ]
+}

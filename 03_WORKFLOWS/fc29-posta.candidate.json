@@ -1,0 +1,159 @@
+{
+  "schema_version": 2,
+  "diagram_type": "workflow",
+  "meta": {
+    "title": "FC-29 · Poštová korešpondencia a registre",
+    "subtitle": "Príjem → evidencia (termín) → triedenie → vybavenie → odoslanie → archív.",
+    "animation": "trace",
+    "visual_preset": "signal-flow",
+    "quality_profile": "showcase",
+    "output": "fc29-posta.html"
+  },
+  "lanes": [
+    {
+      "id": "l1",
+      "label": "Iniciátor (1L)"
+    },
+    {
+      "id": "l2",
+      "label": "Vykonávateľ (1L)"
+    },
+    {
+      "id": "l3",
+      "label": "Dohľad / Schválenie (2L)"
+    },
+    {
+      "id": "l4",
+      "label": "Registre / Výstup"
+    }
+  ],
+  "phases": [
+    {
+      "id": "p0",
+      "label": "Príjem",
+      "fromCol": 0,
+      "toCol": 5
+    }
+  ],
+  "nodes": [
+    {
+      "id": "pri",
+      "lane": "l1",
+      "col": 0,
+      "type": "frontend",
+      "label": "Príjem pošty",
+      "sublabel": "fyzická · e-mail · úradná",
+      "width": 178
+    },
+    {
+      "id": "evid",
+      "lane": "l4",
+      "col": 1,
+      "type": "database",
+      "label": "Evidencia",
+      "sublabel": "dátum · odosielateľ · termín",
+      "tag": "TERMÍN",
+      "width": 198
+    },
+    {
+      "id": "trie",
+      "lane": "l2",
+      "col": 2,
+      "type": "messagebus",
+      "label": "Triedenie → gestor",
+      "sublabel": "rozdelenie",
+      "width": 148
+    },
+    {
+      "id": "gest",
+      "lane": "l2",
+      "col": 3,
+      "type": "backend",
+      "label": "Vybavenie v lehote",
+      "sublabel": "úradná/súdna = priorita",
+      "width": 165
+    },
+    {
+      "id": "odp",
+      "lane": "l4",
+      "col": 4,
+      "type": "database",
+      "label": "Odoslaná pošta",
+      "sublabel": "evidencia odoslania",
+      "width": 148
+    },
+    {
+      "id": "arch",
+      "lane": "l4",
+      "col": 5,
+      "type": "database",
+      "label": "Archív + retencia",
+      "sublabel": "podľa registrov",
+      "tag": "DONE",
+      "width": 148
+    }
+  ],
+  "edges": [
+    {
+      "id": "e0",
+      "from": "pri",
+      "to": "evid"
+    },
+    {
+      "id": "e1",
+      "from": "evid",
+      "to": "trie"
+    },
+    {
+      "id": "e2",
+      "from": "trie",
+      "to": "gest"
+    },
+    {
+      "id": "e3",
+      "from": "gest",
+      "to": "odp"
+    },
+    {
+      "id": "e4",
+      "from": "odp",
+      "to": "arch"
+    }
+  ],
+  "mainPath": [
+    "pri",
+    "evid",
+    "trie",
+    "gest",
+    "odp"
+  ],
+  "cards": [
+    {
+      "dot": "rose",
+      "title": "STOP",
+      "items": [
+        "Úradná pošta bez evidencie termínu = STOP",
+        "Nevybavené v lehote = eskalácia",
+        "Strata zásielky = oznámenie"
+      ]
+    },
+    {
+      "dot": "cyan",
+      "title": "Log",
+      "items": [
+        "Poštový register",
+        "Register odoslanej",
+        "Register termínov"
+      ]
+    },
+    {
+      "dot": "emerald",
+      "title": "KPI",
+      "items": [
+        "100% pošty evidovaná",
+        "100% termínov",
+        "0 stratených zásielok"
+      ]
+    }
+  ]
+}

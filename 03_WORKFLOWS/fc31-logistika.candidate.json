@@ -1,0 +1,191 @@
+{
+  "schema_version": 2,
+  "diagram_type": "workflow",
+  "meta": {
+    "title": "FC-31 · Doprava, logistika a expedícia",
+    "subtitle": "Požiadavka expedície → clearance → dopravca → balenie/ADR → doklady → expedícia → POD → spis.",
+    "animation": "trace",
+    "visual_preset": "signal-flow",
+    "quality_profile": "showcase",
+    "output": "fc31-logistika.html"
+  },
+  "lanes": [
+    {
+      "id": "l1",
+      "label": "Iniciátor (1L)"
+    },
+    {
+      "id": "l2",
+      "label": "Vykonávateľ (1L)"
+    },
+    {
+      "id": "l3",
+      "label": "Dohľad / Schválenie (2L)"
+    },
+    {
+      "id": "l4",
+      "label": "Registre / Výstup"
+    }
+  ],
+  "phases": [
+    {
+      "id": "p0",
+      "label": "Vstup",
+      "fromCol": 0,
+      "toCol": 5
+    }
+  ],
+  "nodes": [
+    {
+      "id": "exp",
+      "lane": "l1",
+      "col": 0,
+      "type": "frontend",
+      "label": "Požiadavka expedície",
+      "sublabel": "objednávka · cieľ",
+      "width": 154.0
+    },
+    {
+      "id": "cle",
+      "lane": "l3",
+      "col": 1,
+      "type": "security",
+      "label": "Export clearance (FC-09)",
+      "sublabel": "EUC · licencia",
+      "tag": "STOP: bez clearance",
+      "width": 180.0
+    },
+    {
+      "id": "dop",
+      "lane": "l2",
+      "col": 2,
+      "type": "backend",
+      "label": "Výber dopravcu",
+      "sublabel": "DD + screening",
+      "width": 148
+    },
+    {
+      "id": "bal",
+      "lane": "l2",
+      "col": 3,
+      "type": "database",
+      "label": "Balenie + ADR",
+      "sublabel": "embaláž ak výbušniny",
+      "tag": "STOP: bez ADR",
+      "width": 148
+    },
+    {
+      "id": "prep",
+      "lane": "l4",
+      "col": 4,
+      "type": "database",
+      "label": "Prep. doklady",
+      "sublabel": "CMR · faktúra · certifikáty",
+      "width": 191
+    },
+    {
+      "id": "send",
+      "lane": "l2",
+      "col": 4,
+      "type": "database",
+      "label": "Expedícia + tracking",
+      "sublabel": "vyslané",
+      "width": 154.0
+    },
+    {
+      "id": "pod",
+      "lane": "l2",
+      "col": 5,
+      "type": "database",
+      "label": "POD + certifikát",
+      "sublabel": "overenie dodávky",
+      "width": 148
+    },
+    {
+      "id": "spis",
+      "lane": "l4",
+      "col": 5,
+      "type": "database",
+      "label": "Spis + hlásenia MH SR",
+      "sublabel": "uzavretý",
+      "tag": "DONE",
+      "width": 160.5
+    }
+  ],
+  "edges": [
+    {
+      "id": "e0",
+      "from": "exp",
+      "to": "cle"
+    },
+    {
+      "id": "e1",
+      "from": "cle",
+      "to": "dop"
+    },
+    {
+      "id": "e2",
+      "from": "dop",
+      "to": "bal"
+    },
+    {
+      "id": "e3",
+      "from": "bal",
+      "to": "prep"
+    },
+    {
+      "id": "e4",
+      "from": "prep",
+      "to": "send"
+    },
+    {
+      "id": "e5",
+      "from": "send",
+      "to": "pod"
+    },
+    {
+      "id": "e6",
+      "from": "pod",
+      "to": "spis"
+    }
+  ],
+  "mainPath": [
+    "exp",
+    "cle",
+    "dop",
+    "bal",
+    "prep",
+    "send",
+    "pod",
+    "spis"
+  ],
+  "cards": [
+    {
+      "dot": "rose",
+      "title": "STOP",
+      "items": [
+        "Bez clearance = STOP",
+        "Dopravca bez screeningu = STOP",
+        "Výbušniny bez ADR = STOP"
+      ]
+    },
+    {
+      "dot": "cyan",
+      "title": "Log",
+      "items": [
+        "Expedičný register",
+        "Certifikáty overenia dodávky",
+        "Dopravný register"
+      ]
+    },
+    {
+      "dot": "emerald",
+      "title": "KPI",
+      "items": [
+        "100% expedícií s clearance",
+        "100% POD",
+        "0 deviácií ADR"
+      ]
+    }
+  ]
+}

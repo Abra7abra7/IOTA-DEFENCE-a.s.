@@ -1,0 +1,177 @@
+{
+  "schema_version": 2,
+  "diagram_type": "workflow",
+  "meta": {
+    "title": "FC-03 · Onboarding a prístupy (freelancer vs TPP)",
+    "subtitle": "Žiadosť → DD → zmluva+NDA → profil prístupov → MFA+technika → školenie → offboarding.",
+    "animation": "trace",
+    "visual_preset": "signal-flow",
+    "quality_profile": "showcase",
+    "output": "fc03-onboarding.html"
+  },
+  "lanes": [
+    {
+      "id": "l1",
+      "label": "Iniciátor / Vlastník"
+    },
+    {
+      "id": "l2",
+      "label": "Vykonávateľ (1L)"
+    },
+    {
+      "id": "l3",
+      "label": "Dohľad / Schválenie (2L)"
+    },
+    {
+      "id": "l4",
+      "label": "Log / Výstup"
+    }
+  ],
+  "phases": [
+    {
+      "id": "p0",
+      "label": "Nábor",
+      "fromCol": 0,
+      "toCol": 5
+    }
+  ],
+  "nodes": [
+    {
+      "id": "z",
+      "lane": "l1",
+      "col": 0,
+      "type": "frontend",
+      "label": "Žiadosť / nábor",
+      "sublabel": "Vlastník / HR",
+      "width": 150
+    },
+    {
+      "id": "dd",
+      "lane": "l3",
+      "col": 1,
+      "type": "security",
+      "label": "Preverenie / DD",
+      "sublabel": "Nákup+CCO / HR",
+      "tag": "Screening OK",
+      "width": 150
+    },
+    {
+      "id": "zml",
+      "lane": "l2",
+      "col": 2,
+      "type": "database",
+      "label": "Zmluva + COI/NDA/Kódex",
+      "sublabel": "Legal / HR",
+      "width": 169.0
+    },
+    {
+      "id": "profil",
+      "lane": "l3",
+      "col": 3,
+      "type": "security",
+      "label": "Profil prístupov",
+      "sublabel": "podľa zóny",
+      "tag": "STOP utajované bez NBÚ",
+      "width": 163
+    },
+    {
+      "id": "ucet",
+      "lane": "l2",
+      "col": 4,
+      "type": "backend",
+      "label": "Účet MFA + technika",
+      "sublabel": "IT/CISO",
+      "width": 150
+    },
+    {
+      "id": "skol",
+      "lane": "l2",
+      "col": 5,
+      "type": "backend",
+      "label": "Školenie",
+      "sublabel": "CCO/CISO/HR",
+      "width": 150
+    },
+    {
+      "id": "off",
+      "lane": "l4",
+      "col": 5,
+      "type": "database",
+      "label": "Offboarding deň D",
+      "sublabel": "revokácia",
+      "tag": "DONE",
+      "width": 150
+    }
+  ],
+  "edges": [
+    {
+      "id": "e0",
+      "from": "z",
+      "to": "dd"
+    },
+    {
+      "id": "e1",
+      "from": "dd",
+      "to": "zml",
+      "label": "screening OK"
+    },
+    {
+      "id": "e2",
+      "from": "zml",
+      "to": "profil"
+    },
+    {
+      "id": "e3",
+      "from": "profil",
+      "to": "ucet",
+      "label": "zóna OK"
+    },
+    {
+      "id": "e4",
+      "from": "ucet",
+      "to": "skol"
+    },
+    {
+      "id": "e5",
+      "from": "skol",
+      "to": "off"
+    }
+  ],
+  "mainPath": [
+    "z",
+    "dd",
+    "zml",
+    "profil",
+    "ucet",
+    "skol"
+  ],
+  "cards": [
+    {
+      "dot": "rose",
+      "title": "STOP",
+      "items": [
+        "Freelancer + Dôverné bez výnimky CISO = STOP",
+        "Utajované bez NBÚ previerky = STOP",
+        "Švarcsystém → Legal"
+      ]
+    },
+    {
+      "dot": "cyan",
+      "title": "Log",
+      "items": [
+        "Access log",
+        "Register školení",
+        "NDA/COI register"
+      ]
+    },
+    {
+      "dot": "emerald",
+      "title": "KPI",
+      "items": [
+        "100% prístupov podľa zón",
+        "MFA 100%",
+        "Revokácia < 24h"
+      ]
+    }
+  ]
+}

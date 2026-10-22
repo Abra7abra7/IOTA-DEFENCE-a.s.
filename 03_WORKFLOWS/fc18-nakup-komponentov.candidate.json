@@ -1,0 +1,186 @@
+{
+  "schema_version": 2,
+  "diagram_type": "workflow",
+  "meta": {
+    "title": "FC-18 · Nákup komponentov (P2P + klasifikácia BOM)",
+    "subtitle": "Request → ECO klasifikácia → výber dodávateľa → PO → príjemka → platba → registre.",
+    "animation": "trace",
+    "visual_preset": "signal-flow",
+    "quality_profile": "showcase",
+    "output": "fc18-nakup-komponentov.html"
+  },
+  "lanes": [
+    {
+      "id": "l1",
+      "label": "Iniciátor (1L)"
+    },
+    {
+      "id": "l2",
+      "label": "Vykonávateľ (1L)"
+    },
+    {
+      "id": "l3",
+      "label": "Dohľad / Schválenie (2L)"
+    },
+    {
+      "id": "l4",
+      "label": "Registre / Výstup"
+    }
+  ],
+  "phases": [
+    {
+      "id": "p0",
+      "label": "Vstup",
+      "fromCol": 0,
+      "toCol": 5
+    }
+  ],
+  "nodes": [
+    {
+      "id": "req",
+      "lane": "l2",
+      "col": 0,
+      "type": "messagebus",
+      "label": "Request komponentu",
+      "sublabel": "špec · množstvo · deadline",
+      "width": 185
+    },
+    {
+      "id": "eco",
+      "lane": "l3",
+      "col": 1,
+      "type": "security",
+      "label": "ECO klasifikácia",
+      "sublabel": "VOP · dual-use · USML/EAR99",
+      "tag": "STOP: bez zaradenia",
+      "width": 191
+    },
+    {
+      "id": "dd",
+      "lane": "l3",
+      "col": 2,
+      "type": "security",
+      "label": "DD dodávateľa",
+      "sublabel": "tretia strana · pôvod",
+      "width": 152
+    },
+    {
+      "id": "po",
+      "lane": "l1",
+      "col": 3,
+      "type": "database",
+      "label": "Objednávka (PO)",
+      "sublabel": "schválenie L1-L4",
+      "width": 132
+    },
+    {
+      "id": "ship",
+      "lane": "l4",
+      "col": 4,
+      "type": "database",
+      "label": "Príjemka + vstup. kontrola",
+      "sublabel": "kvalita · SHN",
+      "width": 193
+    },
+    {
+      "id": "pay",
+      "lane": "l1",
+      "col": 5,
+      "type": "database",
+      "label": "Platba",
+      "sublabel": "4-eyes · proti faktúre",
+      "width": 159
+    },
+    {
+      "id": "reg",
+      "lane": "l4",
+      "col": 2,
+      "type": "database",
+      "label": "Registre",
+      "sublabel": "BOM · klasifikácia · majetok",
+      "tag": "DONE",
+      "width": 198
+    }
+  ],
+  "edges": [
+    {
+      "id": "e0",
+      "from": "req",
+      "to": "eco"
+    },
+    {
+      "id": "e1",
+      "from": "eco",
+      "to": "dd",
+      "label": "OK",
+      "variant": "security"
+    },
+    {
+      "id": "e2",
+      "from": "dd",
+      "to": "po",
+      "label": "schválené",
+      "variant": "default"
+    },
+    {
+      "id": "e3",
+      "from": "po",
+      "to": "ship"
+    },
+    {
+      "id": "e4",
+      "from": "ship",
+      "to": "pay"
+    },
+    {
+      "id": "e5",
+      "from": "pay",
+      "to": "reg"
+    },
+    {
+      "id": "e6",
+      "from": "eco",
+      "to": "reg",
+      "label": "STOP",
+      "variant": "security",
+      "role": "error"
+    }
+  ],
+  "mainPath": [
+    "req",
+    "eco",
+    "dd",
+    "po",
+    "ship"
+  ],
+  "cards": [
+    {
+      "dot": "rose",
+      "title": "STOP",
+      "items": [
+        "Komponent bez exportného zaradenia = neobjednáva",
+        "Dodávateľ bez DD = STOP",
+        "Cena nad limit bez sign-off = STOP"
+      ]
+    },
+    {
+      "dot": "cyan",
+      "title": "Log",
+      "items": [
+        "Nákup register",
+        "Register tretích strán",
+        "Register klasifikácie BOM"
+      ]
+    },
+    {
+      "dot": "emerald",
+      "title": "KPI",
+      "items": [
+        "100% PO klasifikovaných",
+        "100% dodávateľov DD",
+        "P2P cyklus < 10 dní"
+      ]
+    }
+  ],
+  "groups": []
+}
