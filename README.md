@@ -24,6 +24,7 @@ Tento priečinok je **jediný navigačný bod** pre celé fungovanie firmy a pre
 | `06_COMPETITIVE/` | Anduril + CSG briefs | **Archify competitive map** | ✅ |
 | `00_VIZ/` | Prehľadové PNG všetkých archify diagramov | — | ✅ |
 | `07_Drive-REF/` | Zrkadlo pôvodného Google Drive | — | ✅ |
+| `08_TRH-A-FINANCIE/` | **Trh a financie vojenského segmentu EÚ/SK + UAV** (obraty, tržby, zákazky, dodávateľský reťazec) | tabuľky | ✅ |
 
 ---
 
